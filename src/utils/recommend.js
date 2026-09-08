@@ -1,3 +1,5 @@
+import { matchesStrength, matchesWrapper, matchesBrand, matchingFlavors } from "./prefs";
+
 export function rankCigars(cigars, user, liked, inventory = null) {
   let pool = inventory
     ? cigars.filter((c) => inventory.includes(c.id))
@@ -10,20 +12,15 @@ export function rankCigars(cigars, user, liked, inventory = null) {
     .map((cigar) => {
       let score = 0;
 
-      // Onboarding preferences
-      if (cigar.strength === user.strength) score += 3;
-      if (cigar.wrapper === user.wrapper) score += 3;
+      // Onboarding preferences — any selected strength or wrapper counts
+      if (matchesStrength(user, cigar)) score += 3;
+      if (matchesWrapper(user, cigar)) score += 3;
 
       // Favorite brands from onboarding
-      if (user.brands?.includes(cigar.brand)) score += 4;
+      if (matchesBrand(user, cigar)) score += 4;
 
       // Flavor preferences from onboarding
-      if (user.flavors) {
-        const userFlavors = user.flavors.map((f) => f.toLowerCase());
-        cigar.flavorNotes.forEach((note) => {
-          if (userFlavors.includes(note.toLowerCase())) score += 2;
-        });
-      }
+      score += matchingFlavors(user, cigar).length * 2;
 
       // Behavior learning from swipe history
       liked.forEach((likedCigar) => {

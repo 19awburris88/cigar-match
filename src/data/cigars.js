@@ -1,4 +1,28 @@
-const CIGAR_IMG = "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=400";
+/**
+ * Photography: hand-picked Unsplash frames, one per cigar so no two cards
+ * repeat. These are editorial cigar photographs, not manufacturer product
+ * shots — they set the mood for the blend rather than depict that exact stick.
+ */
+const img = (id, w = 900) =>
+  `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=80`;
+
+const PHOTO = {
+  maduroPour: "1612659429327-8f59b894959b",   // dark maduro resting by a whisky glass
+  singleOnWood: "1612659429508-b429d6b07ac1", // banded cigar upright on weathered wood
+  torchLight: "1577931170527-cb5c8f39020c",   // lighting up with a torch flame
+  lightWrapper: "1637248990333-e66e027538f4", // pale wrapper beside a rocks glass
+  cutter: "1577931061564-e746adda00ec",       // guillotine cut, close up
+  openBoxPale: "1514514589924-94eda1732498",  // pale cigars packed in an open box
+  smokeRing: "1520644204196-4a478546826f",    // lit cigar trailing smoke, signet ring
+  cedarBox: "1694716438178-c6f34bddd64d",     // open cedar box, banded rows
+  luxeSpread: "1547652577-b4fe2f34d7ee",      // cigars, cutter and case laid out
+  flame: "1592505690387-24e71ca99897",        // match flame in the dark
+  shopShelf: "1592860819253-fc983565e44a",    // shop shelf lined with boxes
+  agingRoom: "1592862080230-fe0a3b380f21",    // cigars ageing in cedar racks
+  bundled: "1694716479704-459f025d0793",      // bundled feet, ready to band
+  leafHands: "1649779117064-107e63b88758",    // cured leaf in a roller's hands
+  fieldLeaf: "1528446558593-05d60f8d4ae9",    // tobacco hanging in the barn
+};
 
 const cigars = [
   {
@@ -11,7 +35,7 @@ const cigars = [
     origin: "Nicaragua",
     price: "$28",
     rating: 96,
-    image: CIGAR_IMG,
+    image: img(PHOTO.maduroPour),
   },
   {
     id: 2,
@@ -23,7 +47,7 @@ const cigars = [
     origin: "Dominican Republic",
     price: "$18",
     rating: 93,
-    image: CIGAR_IMG,
+    image: img(PHOTO.singleOnWood),
   },
   {
     id: 3,
@@ -35,7 +59,7 @@ const cigars = [
     origin: "Nicaragua",
     price: "$22",
     rating: 95,
-    image: CIGAR_IMG,
+    image: img(PHOTO.torchLight),
   },
   {
     id: 4,
@@ -47,7 +71,7 @@ const cigars = [
     origin: "Dominican Republic",
     price: "$8",
     rating: 88,
-    image: CIGAR_IMG,
+    image: img(PHOTO.lightWrapper),
   },
   {
     id: 5,
@@ -59,7 +83,7 @@ const cigars = [
     origin: "Nicaragua",
     price: "$24",
     rating: 97,
-    image: CIGAR_IMG,
+    image: img(PHOTO.cutter),
   },
   {
     id: 6,
@@ -71,7 +95,7 @@ const cigars = [
     origin: "Honduras",
     price: "$12",
     rating: 91,
-    image: CIGAR_IMG,
+    image: img(PHOTO.openBoxPale),
   },
   {
     id: 7,
@@ -83,7 +107,7 @@ const cigars = [
     origin: "Nicaragua",
     price: "$22",
     rating: 96,
-    image: CIGAR_IMG,
+    image: img(PHOTO.smokeRing),
   },
   {
     id: 8,
@@ -95,7 +119,7 @@ const cigars = [
     origin: "Dominican Republic",
     price: "$10",
     rating: 89,
-    image: CIGAR_IMG,
+    image: img(PHOTO.cedarBox),
   },
   {
     id: 9,
@@ -107,7 +131,7 @@ const cigars = [
     origin: "Cuba",
     price: "$45",
     rating: 98,
-    image: CIGAR_IMG,
+    image: img(PHOTO.luxeSpread),
   },
   {
     id: 10,
@@ -119,7 +143,7 @@ const cigars = [
     origin: "Honduras",
     price: "$14",
     rating: 94,
-    image: CIGAR_IMG,
+    image: img(PHOTO.flame),
   },
   {
     id: 11,
@@ -131,7 +155,7 @@ const cigars = [
     origin: "Nicaragua",
     price: "$10",
     rating: 90,
-    image: CIGAR_IMG,
+    image: img(PHOTO.shopShelf),
   },
   {
     id: 12,
@@ -143,7 +167,7 @@ const cigars = [
     origin: "Cuba",
     price: "$30",
     rating: 94,
-    image: CIGAR_IMG,
+    image: img(PHOTO.agingRoom),
   },
   {
     id: 13,
@@ -155,7 +179,7 @@ const cigars = [
     origin: "Dominican Republic",
     price: "$20",
     rating: 93,
-    image: CIGAR_IMG,
+    image: img(PHOTO.bundled),
   },
   {
     id: 14,
@@ -167,7 +191,7 @@ const cigars = [
     origin: "Nicaragua",
     price: "$11",
     rating: 91,
-    image: CIGAR_IMG,
+    image: img(PHOTO.leafHands),
   },
   {
     id: 15,
@@ -179,7 +203,7 @@ const cigars = [
     origin: "Dominican Republic",
     price: "$25",
     rating: 92,
-    image: CIGAR_IMG,
+    image: img(PHOTO.fieldLeaf),
   },
 ];
 

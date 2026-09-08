@@ -1,14 +1,34 @@
 import { useState } from "react";
-import {
-  Box,
-  Button,
-  Typography,
-  Stack,
-  TextField,
-  Chip,
-} from "@mui/material";
+import { Box, Button, Typography, Stack, TextField, ButtonBase } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
-import logo from "../assets/cigar-match-logo.png";
+import CheckIcon from "@mui/icons-material/Check";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import Logo, { LogoMark } from "../components/Logo";
+import { tokens } from "../theme";
+
+const EXPERIENCE = [
+  { label: "Beginner", hint: "New to it — keep things smooth" },
+  { label: "Intermediate", hint: "A regular ritual, still exploring" },
+  { label: "Advanced", hint: "I know my wrappers and vitolas" },
+  { label: "Aficionado", hint: "Aged boxes and rare releases" },
+];
+
+const STRENGTH = [
+  { label: "Mild", hint: "Gentle, easy morning smoke" },
+  { label: "Mild-Medium", hint: "Soft with a little backbone" },
+  { label: "Medium", hint: "The everyday sweet spot" },
+  { label: "Medium-Full", hint: "Rich, but still balanced" },
+  { label: "Full", hint: "Bold, powerful, after dinner" },
+];
+
+const WRAPPER = [
+  { label: "Connecticut", hint: "Pale, creamy, mild" },
+  { label: "Maduro", hint: "Dark, sweet, cocoa-forward" },
+  { label: "Habano", hint: "Spicy and full of character" },
+  { label: "Cameroon", hint: "Toasty with a subtle sweetness" },
+  { label: "Corojo", hint: "Peppery and assertive" },
+  { label: "Natural", hint: "Clean, classic, well-rounded" },
+];
 
 const FLAVOR_OPTIONS = [
   "Cocoa", "Coffee", "Pepper", "Cedar", "Sweet", "Earth",
@@ -25,54 +45,110 @@ const PAIRING_OPTIONS = [
   "Bourbon", "Scotch", "Rum", "Coffee", "Espresso", "Beer", "Red Wine", "Tequila",
 ];
 
-const SelectButton = ({ label, selected, onClick }) => (
-  <Button
-    fullWidth
-    variant={selected ? "contained" : "outlined"}
-    onClick={onClick}
-    sx={{
-      py: 1.8,
-      borderRadius: 3,
-      bgcolor: selected ? "#D4AF37" : "transparent",
-      color: selected ? "#000" : "#fff",
-      borderColor: selected ? "#D4AF37" : "#333",
-      fontWeight: "bold",
-      fontSize: 14,
-      "&:hover": {
-        bgcolor: selected ? "#c5a030" : "rgba(212,175,55,0.08)",
-        borderColor: "#D4AF37",
-      },
-    }}
-  >
-    {label}
-  </Button>
-);
+/* ————— building blocks ————— */
 
-const MultiChip = ({ label, selected, onClick }) => (
-  <Chip
-    label={label}
-    onClick={onClick}
-    sx={{
-      bgcolor: selected ? "#D4AF37" : "#1a1a1a",
-      color: selected ? "#000" : "#ccc",
-      border: "1px solid",
-      borderColor: selected ? "#D4AF37" : "#333",
-      fontWeight: selected ? "bold" : "normal",
-      fontSize: 13,
-      height: 36,
-      cursor: "pointer",
-      "&:hover": { borderColor: "#D4AF37" },
-    }}
-  />
-);
+function OptionRow({ label, hint, selected, multi, onClick }) {
+  return (
+    <ButtonBase
+      onClick={onClick}
+      sx={{
+        width: "100%",
+        justifyContent: "flex-start",
+        textAlign: "left",
+        px: 2,
+        py: 1.5,
+        borderRadius: 3,
+        border: "1px solid",
+        borderColor: selected ? tokens.gold : tokens.line,
+        bgcolor: selected ? "rgba(212,175,55,0.09)" : tokens.surface,
+        transition: "border-color .18s, background-color .18s",
+        "&:hover": { borderColor: selected ? tokens.gold : "rgba(212,175,55,0.35)" },
+      }}
+    >
+      <Box sx={{ flex: 1, minWidth: 0 }}>
+        <Typography sx={{ fontSize: 15, fontWeight: 600, color: selected ? tokens.goldPale : tokens.text }}>
+          {label}
+        </Typography>
+        {hint && (
+          <Typography sx={{ fontSize: 12, color: tokens.textFaint, mt: 0.2 }}>
+            {hint}
+          </Typography>
+        )}
+      </Box>
+
+      <Box
+        sx={{
+          ml: 1.5,
+          width: 22,
+          height: 22,
+          flexShrink: 0,
+          borderRadius: multi ? "6px" : "50%",
+          border: "1px solid",
+          borderColor: selected ? tokens.gold : "rgba(255,255,255,0.16)",
+          bgcolor: selected ? tokens.gold : "transparent",
+          display: "grid",
+          placeItems: "center",
+          transition: "all .18s",
+        }}
+      >
+        {selected && <CheckIcon sx={{ fontSize: 15, color: "#0A0908" }} />}
+      </Box>
+    </ButtonBase>
+  );
+}
+
+function TokenChip({ label, selected, onClick }) {
+  return (
+    <ButtonBase
+      onClick={onClick}
+      sx={{
+        px: 1.8,
+        py: 1,
+        borderRadius: 999,
+        border: "1px solid",
+        borderColor: selected ? tokens.gold : tokens.line,
+        bgcolor: selected ? tokens.gold : tokens.surface,
+        color: selected ? "#0A0908" : tokens.textMuted,
+        fontSize: 13,
+        fontWeight: selected ? 700 : 500,
+        transition: "all .18s",
+        "&:hover": { borderColor: "rgba(212,175,55,0.5)" },
+      }}
+    >
+      {label}
+    </ButtonBase>
+  );
+}
+
+function StepHeading({ title, sub, count }) {
+  return (
+    <Box sx={{ mb: 2.5 }}>
+      <Typography variant="h5" sx={{ fontSize: 26, color: tokens.text }}>
+        {title}
+      </Typography>
+      {/* One flowing line so a long hint plus the counter never breaks badly */}
+      <Typography sx={{ fontSize: 13, color: tokens.textMuted, mt: 0.6, lineHeight: 1.5 }}>
+        {sub}
+        {count > 0 && (
+          <Typography component="span" sx={{ fontSize: 12.5, fontWeight: 700, color: tokens.gold, ml: 0.8 }}>
+            · {count} selected
+          </Typography>
+        )}
+      </Typography>
+    </Box>
+  );
+}
+
+/* ————— screen ————— */
 
 export default function Onboarding({ setUser }) {
+  const [started, setStarted] = useState(false);
   const [step, setStep] = useState(0);
   const [form, setForm] = useState({
     name: "",
     experience: "",
-    strength: "",
-    wrapper: "",
+    strength: [],
+    wrapper: [],
     flavors: [],
     brands: [],
     pairings: [],
@@ -86,250 +162,299 @@ export default function Onboarding({ setUser }) {
         : [...f[field], value],
     }));
 
-  const canAdvance = () => {
-    if (step === 0) return form.name.trim().length > 0;
-    if (step === 1) return form.experience !== "";
-    if (step === 2) return form.strength !== "";
-    if (step === 3) return form.wrapper !== "";
-    if (step === 4) return form.flavors.length > 0;
-    return true;
-  };
-
-  const TOTAL_STEPS = 7;
-
   const steps = [
-    // 0 — name
-    <Box key="name">
-      <Typography variant="h5" fontWeight="bold" mb={1}>
-        What should we call you?
-      </Typography>
-      <Typography color="gray" fontSize={14} mb={3}>
-        We'll personalize your entire experience
-      </Typography>
-      <TextField
-        fullWidth
-        placeholder="Your name"
-        value={form.name}
-        onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-        onKeyDown={(e) => e.key === "Enter" && canAdvance() && setStep(1)}
-        autoFocus
-        sx={{ "& .MuiOutlinedInput-root": { bgcolor: "#1a1a1a", borderRadius: 2, color: "#fff", "& fieldset": { borderColor: "#333" }, "&:hover fieldset": { borderColor: "#D4AF37" }, "&.Mui-focused fieldset": { borderColor: "#D4AF37" } } }}
-        InputProps={{ style: { color: "#fff" } }}
-      />
-    </Box>,
-
-    // 1 — experience
-    <Box key="exp">
-      <Typography variant="h5" fontWeight="bold" mb={1}>
-        Your experience level?
-      </Typography>
-      <Typography color="gray" fontSize={14} mb={3}>
-        Helps us calibrate recommendations
-      </Typography>
-      <Stack spacing={1.5}>
-        {["Beginner", "Intermediate", "Advanced", "Aficionado"].map((opt) => (
-          <SelectButton
-            key={opt}
-            label={opt}
-            selected={form.experience === opt}
-            onClick={() => setForm((f) => ({ ...f, experience: opt }))}
+    {
+      key: "name",
+      valid: form.name.trim().length > 0,
+      render: () => (
+        <>
+          <StepHeading title="What should we call you?" sub="We'll personalize your whole experience" />
+          <TextField
+            fullWidth
+            placeholder="Your name"
+            value={form.name}
+            onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+            onKeyDown={(e) => e.key === "Enter" && form.name.trim() && setStep(1)}
+            autoFocus
+            slotProps={{ input: { sx: { fontSize: 16, py: 0.4 } } }}
           />
-        ))}
-      </Stack>
-    </Box>,
-
-    // 2 — strength
-    <Box key="strength">
-      <Typography variant="h5" fontWeight="bold" mb={1}>
-        Preferred strength?
-      </Typography>
-      <Typography color="gray" fontSize={14} mb={3}>
-        How bold do you like your smoke?
-      </Typography>
-      <Stack spacing={1.5}>
-        {["Mild", "Mild-Medium", "Medium", "Medium-Full", "Full"].map((opt) => (
-          <SelectButton
-            key={opt}
-            label={opt}
-            selected={form.strength === opt}
-            onClick={() => setForm((f) => ({ ...f, strength: opt }))}
+        </>
+      ),
+    },
+    {
+      key: "experience",
+      valid: form.experience !== "",
+      render: () => (
+        <>
+          <StepHeading title="How far along are you?" sub="Helps us calibrate recommendations" />
+          <Stack spacing={1.2}>
+            {EXPERIENCE.map((o) => (
+              <OptionRow
+                key={o.label}
+                {...o}
+                selected={form.experience === o.label}
+                onClick={() => setForm((f) => ({ ...f, experience: o.label }))}
+              />
+            ))}
+          </Stack>
+        </>
+      ),
+    },
+    {
+      key: "strength",
+      valid: form.strength.length > 0,
+      render: () => (
+        <>
+          <StepHeading
+            title="Which strengths do you reach for?"
+            sub="Pick as many as you like"
+            count={form.strength.length}
           />
-        ))}
-      </Stack>
-    </Box>,
-
-    // 3 — wrapper
-    <Box key="wrapper">
-      <Typography variant="h5" fontWeight="bold" mb={1}>
-        Favorite wrapper?
-      </Typography>
-      <Typography color="gray" fontSize={14} mb={3}>
-        The wrapper defines a lot of the character
-      </Typography>
-      <Stack spacing={1.5}>
-        {["Connecticut", "Maduro", "Habano", "Cameroon", "Corojo", "Natural"].map((opt) => (
-          <SelectButton
-            key={opt}
-            label={opt}
-            selected={form.wrapper === opt}
-            onClick={() => setForm((f) => ({ ...f, wrapper: opt }))}
+          <Stack spacing={1.2}>
+            {STRENGTH.map((o) => (
+              <OptionRow
+                key={o.label}
+                {...o}
+                multi
+                selected={form.strength.includes(o.label)}
+                onClick={() => toggle("strength", o.label)}
+              />
+            ))}
+          </Stack>
+        </>
+      ),
+    },
+    {
+      key: "wrapper",
+      valid: form.wrapper.length > 0,
+      render: () => (
+        <>
+          <StepHeading
+            title="Favorite wrappers?"
+            sub="The wrapper sets most of the character — pick a few"
+            count={form.wrapper.length}
           />
-        ))}
-      </Stack>
-    </Box>,
-
-    // 4 — flavors
-    <Box key="flavors">
-      <Typography variant="h5" fontWeight="bold" mb={1}>
-        Favorite flavor notes?
-      </Typography>
-      <Typography color="gray" fontSize={14} mb={3}>
-        Select all that you enjoy
-      </Typography>
-      <Stack direction="row" flexWrap="wrap" gap={1.5}>
-        {FLAVOR_OPTIONS.map((opt) => (
-          <MultiChip
-            key={opt}
-            label={opt}
-            selected={form.flavors.includes(opt)}
-            onClick={() => toggle("flavors", opt)}
+          <Stack spacing={1.2}>
+            {WRAPPER.map((o) => (
+              <OptionRow
+                key={o.label}
+                {...o}
+                multi
+                selected={form.wrapper.includes(o.label)}
+                onClick={() => toggle("wrapper", o.label)}
+              />
+            ))}
+          </Stack>
+        </>
+      ),
+    },
+    {
+      key: "flavors",
+      valid: form.flavors.length > 0,
+      render: () => (
+        <>
+          <StepHeading
+            title="Which notes do you chase?"
+            sub="Select everything you enjoy"
+            count={form.flavors.length}
           />
-        ))}
-      </Stack>
-    </Box>,
-
-    // 5 — brands
-    <Box key="brands">
-      <Typography variant="h5" fontWeight="bold" mb={1}>
-        Favorite brands?
-      </Typography>
-      <Typography color="gray" fontSize={14} mb={3}>
-        Select any you already love — optional
-      </Typography>
-      <Stack direction="row" flexWrap="wrap" gap={1.5}>
-        {BRAND_OPTIONS.map((opt) => (
-          <MultiChip
-            key={opt}
-            label={opt}
-            selected={form.brands.includes(opt)}
-            onClick={() => toggle("brands", opt)}
+          <Stack direction="row" sx={{ flexWrap: "wrap", gap: 1.2 }}>
+            {FLAVOR_OPTIONS.map((o) => (
+              <TokenChip key={o} label={o} selected={form.flavors.includes(o)} onClick={() => toggle("flavors", o)} />
+            ))}
+          </Stack>
+        </>
+      ),
+    },
+    {
+      key: "brands",
+      valid: true,
+      render: () => (
+        <>
+          <StepHeading
+            title="Any houses you already love?"
+            sub="Optional — skip if you're still exploring"
+            count={form.brands.length}
           />
-        ))}
-      </Stack>
-    </Box>,
-
-    // 6 — pairings
-    <Box key="pairings">
-      <Typography variant="h5" fontWeight="bold" mb={1}>
-        What do you pair with?
-      </Typography>
-      <Typography color="gray" fontSize={14} mb={3}>
-        We'll suggest perfect pairings for every cigar
-      </Typography>
-      <Stack direction="row" flexWrap="wrap" gap={1.5}>
-        {PAIRING_OPTIONS.map((opt) => (
-          <MultiChip
-            key={opt}
-            label={opt}
-            selected={form.pairings.includes(opt)}
-            onClick={() => toggle("pairings", opt)}
+          <Stack direction="row" sx={{ flexWrap: "wrap", gap: 1.2 }}>
+            {BRAND_OPTIONS.map((o) => (
+              <TokenChip key={o} label={o} selected={form.brands.includes(o)} onClick={() => toggle("brands", o)} />
+            ))}
+          </Stack>
+        </>
+      ),
+    },
+    {
+      key: "pairings",
+      valid: true,
+      render: () => (
+        <>
+          <StepHeading
+            title="What's in your glass?"
+            sub="We'll suggest a pairing with every cigar"
+            count={form.pairings.length}
           />
-        ))}
-      </Stack>
-    </Box>,
+          <Stack direction="row" sx={{ flexWrap: "wrap", gap: 1.2 }}>
+            {PAIRING_OPTIONS.map((o) => (
+              <TokenChip key={o} label={o} selected={form.pairings.includes(o)} onClick={() => toggle("pairings", o)} />
+            ))}
+          </Stack>
+        </>
+      ),
+    },
   ];
 
+  const total = steps.length;
+  const current = steps[step];
+  const isLast = step === total - 1;
+  const optional = !["name", "experience", "strength", "wrapper", "flavors"].includes(current.key);
+
+  /* ————— splash ————— */
+  if (!started) {
+    return (
+      <Box
+        sx={{
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          px: 4,
+          textAlign: "center",
+          background:
+            "radial-gradient(520px 340px at 50% 24%, rgba(212,175,55,0.13), transparent 70%), " +
+            "radial-gradient(420px 300px at 50% 96%, rgba(242,102,13,0.09), transparent 70%)",
+        }}
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 18, scale: 0.96 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.7, ease: [0.2, 0.7, 0.3, 1] }}
+        >
+          <Logo size={31} stacked tagline />
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.28 }}
+          style={{ width: "100%" }}
+        >
+          <Typography variant="h5" sx={{ fontSize: 27, mt: 7, lineHeight: 1.34, color: tokens.text }}
+          >
+            Find the cigar
+            <br />
+            that fits your palate.
+          </Typography>
+          <Typography sx={{ fontSize: 14, color: tokens.textMuted, mt: 2, lineHeight: 1.7 }}>
+            Answer seven quick questions. We'll learn your taste, then keep
+            sharpening it with every swipe.
+          </Typography>
+
+          <Button
+            fullWidth
+            variant="contained"
+            onClick={() => setStarted(true)}
+            sx={{ mt: 5, py: 1.8, borderRadius: 3, fontSize: 15 }}
+          >
+            Build my profile
+          </Button>
+          <Typography sx={{ fontSize: 11, color: tokens.textFaint, mt: 2, letterSpacing: 0.5 }}>
+            Takes about a minute · 21+
+          </Typography>
+        </motion.div>
+      </Box>
+    );
+  }
+
+  /* ————— questions ————— */
   return (
-    <Box
-      sx={{
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        color: "#fff",
-        px: 3,
-        pt: 5,
-        pb: 4,
-      }}
-    >
-      {/* HEADER */}
-      <Box sx={{ textAlign: "center" }} mb={4}>
-        <Box
-          component="img"
-          src={logo}
-          alt="Cigar Match"
-          sx={{ height: 120, mb: 1, objectFit: "contain", display: "block", mx: "auto" }}
-        />
-        <Typography color="gray" fontSize={12} mt={0.5} letterSpacing={1}>
-          STEP {step + 1} OF {TOTAL_STEPS}
+    <Box sx={{ height: "100%", display: "flex", flexDirection: "column", px: 3, pt: 3, pb: 3 }}>
+      {/* header */}
+      <Stack direction="row" spacing={1.5} sx={{ mb: 2.5, alignItems: "center" }}>
+        <ButtonBase
+          onClick={() => (step === 0 ? setStarted(false) : setStep((s) => s - 1))}
+          sx={{
+            width: 34,
+            height: 34,
+            borderRadius: "50%",
+            border: `1px solid ${tokens.line}`,
+            color: tokens.textMuted,
+            flexShrink: 0,
+            "&:hover": { borderColor: tokens.gold, color: tokens.gold },
+          }}
+        >
+          <ArrowBackIcon sx={{ fontSize: 17 }} />
+        </ButtonBase>
+
+        <LogoMark size={26} />
+
+        <Box sx={{ flex: 1 }} />
+
+        <Typography sx={{ fontSize: 11, fontWeight: 600, letterSpacing: 1.4, color: tokens.textFaint }}>
+          {step + 1} / {total}
         </Typography>
-        <Box sx={{ height: 3, bgcolor: "#222", borderRadius: 5, mt: 2 }}>
+      </Stack>
+
+      {/* segmented progress */}
+      <Stack direction="row" spacing={0.6} sx={{ mb: 3.5 }}>
+        {steps.map((s, i) => (
           <Box
+            key={s.key}
             sx={{
-              width: `${((step + 1) / TOTAL_STEPS) * 100}%`,
-              height: "100%",
-              bgcolor: "#D4AF37",
-              borderRadius: 5,
-              transition: "width 0.35s ease",
+              flex: 1,
+              height: 3,
+              borderRadius: 3,
+              bgcolor: i <= step ? tokens.gold : "rgba(255,255,255,0.09)",
+              boxShadow: i === step ? "0 0 10px rgba(212,175,55,0.55)" : "none",
+              transition: "background-color .3s, box-shadow .3s",
             }}
           />
-        </Box>
-      </Box>
+        ))}
+      </Stack>
 
-      {/* STEP CONTENT */}
-      <Box sx={{ flex: 1, overflowY: "auto" }}>
+      {/* content */}
+      <Box sx={{ flex: 1, overflowY: "auto", mx: -0.5, px: 0.5 }}>
         <AnimatePresence mode="wait">
           <motion.div
-            key={step}
-            initial={{ opacity: 0, x: 32 }}
+            key={current.key}
+            initial={{ opacity: 0, x: 24 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -32 }}
+            exit={{ opacity: 0, x: -24 }}
             transition={{ duration: 0.22 }}
           >
-            {steps[step]}
+            {current.render()}
+            <Box sx={{ height: 8 }} />
           </motion.div>
         </AnimatePresence>
       </Box>
 
-      {/* NAV BUTTONS */}
-      <Stack direction="row" spacing={2} mt={3}>
-        {step > 0 && (
-          <Button
-            variant="outlined"
-            onClick={() => setStep((s) => s - 1)}
-            sx={{
-              flex: 1,
-              py: 1.8,
-              borderRadius: 3,
-              borderColor: "#333",
-              color: "#fff",
-              "&:hover": { borderColor: "#D4AF37" },
-            }}
-          >
-            Back
-          </Button>
-        )}
+      {/* actions */}
+      <Stack spacing={1} sx={{ mt: 2.5 }}>
         <Button
+          fullWidth
           variant="contained"
-          disabled={!canAdvance()}
-          onClick={
-            step === TOTAL_STEPS - 1
-              ? () => setUser(form)
-              : () => setStep((s) => s + 1)
-          }
+          disabled={!current.valid}
+          onClick={() => (isLast ? setUser(form) : setStep((s) => s + 1))}
           sx={{
-            flex: 1,
             py: 1.8,
             borderRadius: 3,
-            bgcolor: "#D4AF37",
-            color: "#000",
-            fontWeight: "bold",
             fontSize: 15,
-            "&:hover": { bgcolor: "#c5a030" },
-            "&.Mui-disabled": { bgcolor: "#333", color: "#555" },
+            "&.Mui-disabled": { bgcolor: "rgba(255,255,255,0.06)", color: tokens.textFaint },
           }}
         >
-          {step === TOTAL_STEPS - 1 ? "Start Discovering" : "Next"}
+          {isLast ? "Start discovering" : "Continue"}
         </Button>
+
+        {optional && (
+          <Button
+            fullWidth
+            onClick={() => (isLast ? setUser(form) : setStep((s) => s + 1))}
+            sx={{ color: tokens.textFaint, fontSize: 13, "&:hover": { color: tokens.gold, bgcolor: "transparent" } }}
+          >
+            Skip this step
+          </Button>
+        )}
       </Stack>
     </Box>
   );

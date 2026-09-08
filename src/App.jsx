@@ -7,8 +7,41 @@ import CheckIn from "./pages/CheckIn";
 import Lounges from "./pages/Lounges";
 import Humidor from "./pages/Humidor";
 import BottomNav from "./components/BottomNav";
+import { tokens } from "./theme";
 
 const MAIN_VIEWS = ["swipe", "lounges", "humidor", "profile"];
+
+/** Phone-shaped frame the whole app lives inside. */
+function Shell({ children }) {
+  return (
+    <Box
+      sx={{
+        height: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: { xs: "stretch", sm: "center" },
+        py: { xs: 0, sm: 3 },
+      }}
+    >
+      <Box
+        sx={{
+          position: "relative",
+          overflow: "hidden",
+          width: "100%",
+          maxWidth: 430,
+          height: { xs: "100%", sm: "min(920px, 100%)" },
+          bgcolor: tokens.bg,
+          color: tokens.text,
+          borderRadius: { xs: 0, sm: "28px" },
+          border: { xs: "none", sm: `1px solid ${tokens.line}` },
+          boxShadow: { xs: "none", sm: "0 30px 90px rgba(0,0,0,0.7)" },
+        }}
+      >
+        {children}
+      </Box>
+    </Box>
+  );
+}
 
 function App() {
   const [user, setUser] = useState(null);
@@ -19,21 +52,11 @@ function App() {
 
   if (!user) {
     return (
-      <Box
-        sx={{
-          maxWidth: 420,
-          margin: "0 auto",
-          height: "100vh",
-          bgcolor: "#0b0b0b",
-          overflow: "hidden",
-        }}
-      >
+      <Shell>
         <Onboarding setUser={setUser} />
-      </Box>
+      </Shell>
     );
   }
-
-  const isMainView = MAIN_VIEWS.includes(view);
 
   const pages = {
     swipe: (
@@ -46,42 +69,25 @@ function App() {
         setView={setView}
       />
     ),
-    lounges: (
-      <Lounges
-        setView={setView}
-      />
-    ),
-    humidor: (
-      <Humidor
-        humidor={humidor}
-        setHumidor={setHumidor}
-      />
-    ),
+    lounges: <Lounges setView={setView} />,
+    humidor: <Humidor humidor={humidor} setHumidor={setHumidor} setView={setView} />,
     profile: (
       <Profile
         user={user}
         liked={liked}
+        humidor={humidor}
+        setHumidor={setHumidor}
+        setView={setView}
       />
     ),
   };
 
   return (
-    <Box
-      sx={{
-        maxWidth: 420,
-        margin: "0 auto",
-        height: "100vh",
-        bgcolor: "#0b0b0b",
-        position: "relative",
-        overflow: "hidden",
-      }}
-    >
-      {isMainView ? (
+    <Shell>
+      {MAIN_VIEWS.includes(view) ? (
         <>
-          <Box sx={{ height: "calc(100% - 70px)", overflowY: "auto" }}>
-            {pages[view]}
-          </Box>
-          <BottomNav view={view} setView={setView} />
+          <Box sx={{ height: "calc(100% - 72px)", overflow: "hidden" }}>{pages[view]}</Box>
+          <BottomNav view={view} setView={setView} humidorCount={humidor.length} />
         </>
       ) : (
         <CheckIn
@@ -92,7 +98,7 @@ function App() {
           setView={setView}
         />
       )}
-    </Box>
+    </Shell>
   );
 }
 

@@ -1,20 +1,26 @@
 import { useState } from "react";
+import { Box, Typography, Button, Stack, IconButton, ButtonBase } from "@mui/material";
+import { motion, AnimatePresence } from "framer-motion";
+import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
+import Inventory2Icon from "@mui/icons-material/Inventory2";
+import AddLocationAltOutlinedIcon from "@mui/icons-material/AddLocationAltOutlined";
+import CloseIcon from "@mui/icons-material/Close";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import LocalBarIcon from "@mui/icons-material/LocalBar";
 import cigars from "../data/cigars";
 import { rankCigars } from "../utils/recommend";
 import { getPairing } from "../utils/pairing";
-import {
-  Card,
-  CardContent,
-  Typography,
-  Button,
-  Stack,
-  Box,
-  IconButton,
-} from "@mui/material";
-import { motion, AnimatePresence } from "framer-motion";
-import Inventory2Icon from "@mui/icons-material/Inventory2";
-import AddCircleOutlinedIcon from "@mui/icons-material/AddCircleOutlined";
-import logo from "../assets/cigar-match-logo.png";
+import { matchReasons } from "../utils/reasons";
+import Logo from "../components/Logo";
+import { tokens } from "../theme";
+
+function Meta({ children }) {
+  return (
+    <Typography sx={{ fontSize: 11.5, color: tokens.textMuted, letterSpacing: 0.2 }}>
+      {children}
+    </Typography>
+  );
+}
 
 export default function Swipe({ user, liked, setLiked, humidor, setHumidor, setView }) {
   const [passed, setPassed] = useState([]);
@@ -23,285 +29,345 @@ export default function Swipe({ user, liked, setLiked, humidor, setHumidor, setV
   const seen = [...liked, ...passed].map((c) => c.id);
   const deck = rankCigars(cigars, user, liked).filter((c) => !seen.includes(c.id));
   const cigar = deck[0];
+  const next = deck[1];
+
   const pairing = cigar ? getPairing(cigar) : null;
   const inHumidor = cigar && humidor.some((c) => c.id === cigar.id);
+  const reasons = cigar ? matchReasons(cigar, user, liked).slice(0, 3) : [];
 
   const handleSwipe = (direction) => {
-    setExitDir(direction === "right" ? 400 : -400);
-    if (direction === "right") {
-      setLiked((prev) => [...prev, cigar]);
-    } else {
-      setPassed((prev) => [...prev, cigar]);
-    }
+    setExitDir(direction === "right" ? 420 : -420);
+    if (direction === "right") setLiked((prev) => [...prev, cigar]);
+    else setPassed((prev) => [...prev, cigar]);
   };
 
   const addToHumidor = () => {
     if (!inHumidor) setHumidor((prev) => [...prev, cigar]);
   };
 
-  if (!cigar) {
-    return (
-      <Box
+  const header = (
+    <Stack direction="row" sx={{ mb: 2, justifyContent: "space-between", alignItems: "center" }}>
+      <Logo size={19} />
+      <ButtonBase
+        onClick={() => setView("checkin")}
         sx={{
-          height: "100%",
           display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
+          gap: 0.7,
           alignItems: "center",
-          color: "#fff",
-          textAlign: "center",
-          px: 3,
+          px: 1.5,
+          py: 0.8,
+          borderRadius: 2.5,
+          border: `1px solid ${tokens.line}`,
+          color: tokens.gold,
+          fontSize: 12,
+          fontWeight: 600,
+          "&:hover": { borderColor: tokens.gold, bgcolor: "rgba(212,175,55,0.06)" },
         }}
       >
-        <Typography fontSize={52} mb={2}>🔥</Typography>
-        <Typography variant="h6" fontWeight="bold">You've seen them all</Typography>
-        <Typography color="gray" fontSize={13} mt={1}>
-          Head to your Profile to review your picks
+        <AddLocationAltOutlinedIcon sx={{ fontSize: 15 }} />
+        Check In
+      </ButtonBase>
+    </Stack>
+  );
+
+  if (!cigar) {
+    return (
+      <Box sx={{ height: "100%", display: "flex", flexDirection: "column", px: 2.5, pt: 2.5, pb: 1.5 }}>
+        {header}
+        <Box
+          sx={{
+            flex: 1,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            textAlign: "center",
+            px: 1.5,
+          }}
+        >
+        <Box
+          sx={{
+            width: 68,
+            height: 68,
+            borderRadius: "50%",
+            border: `1px solid ${tokens.line}`,
+            display: "grid",
+            placeItems: "center",
+            mb: 2.5,
+          }}
+        >
+          <LocalBarIcon sx={{ fontSize: 28, color: tokens.gold }} />
+        </Box>
+        <Typography variant="h5" sx={{ fontSize: 23 }}>
+          That's the whole humidor
         </Typography>
+        <Typography sx={{ color: tokens.textMuted, fontSize: 13.5, mt: 1, lineHeight: 1.7 }}>
+          You've been through every cigar we have. Your profile has the full
+          picture of your palate now.
+        </Typography>
+          <Button variant="contained" onClick={() => setView("profile")} sx={{ mt: 3.5, px: 4, py: 1.5, borderRadius: 3 }}>
+            See my taste profile
+          </Button>
+        </Box>
       </Box>
     );
   }
 
   return (
-    <Box
-      sx={{
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        px: 2,
-        pt: 3,
-        pb: 2,
-      }}
-    >
-      {/* HEADER */}
-      <Stack
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-        sx={{ width: "100%", maxWidth: 360, mb: 2 }}
-      >
-        <Box
-          component="img"
-          src={logo}
-          alt="Cigar Match"
-          sx={{ height: 32, objectFit: "contain" }}
-        />
-        <Button
-          size="small"
-          onClick={() => setView("checkin")}
-          startIcon={<AddCircleOutlinedIcon sx={{ fontSize: 16 }} />}
-          sx={{
-            color: "#D4AF37",
-            fontSize: 12,
-            textTransform: "none",
-            border: "1px solid #333",
-            borderRadius: 2,
-            px: 1.5,
-            py: 0.6,
-          }}
-        >
-          Check In
-        </Button>
-      </Stack>
+    <Box sx={{ height: "100%", display: "flex", flexDirection: "column", px: 2.5, pt: 2.5, pb: 1.5 }}>
+      {header}
 
-      {/* SWIPE CARD */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={cigar.id}
-          drag="x"
-          dragConstraints={{ left: 0, right: 0 }}
-          whileTap={{ scale: 0.97 }}
-          whileDrag={{ rotate: 4 }}
-          onDragEnd={(_, info) => {
-            if (info.offset.x > 120) handleSwipe("right");
-            else if (info.offset.x < -120) handleSwipe("left");
-          }}
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, x: exitDir, rotate: exitDir > 0 ? 12 : -12 }}
-          transition={{ duration: 0.3 }}
-          style={{ width: "100%", maxWidth: 360 }}
-        >
-          <Card
+      {/* card stack */}
+      <Box sx={{ flex: 1, position: "relative", minHeight: 0 }}>
+        {/* peek of the next card, so the deck reads as a stack */}
+        {next && (
+          <Box
             sx={{
-              bgcolor: "#111",
-              borderRadius: 5,
-              overflow: "hidden",
-              border: "1px solid #222",
+              position: "absolute",
+              inset: 0,
+              top: 10,
+              mx: 1.5,
+              borderRadius: "22px",
+              bgcolor: tokens.surface,
+              border: `1px solid ${tokens.line}`,
+              opacity: 0.55,
             }}
-          >
-            {/* IMAGE */}
-            <Box sx={{ position: "relative" }}>
-              <img
-                src={cigar.image}
-                alt={cigar.name}
-                style={{
-                  width: "100%",
-                  height: 210,
-                  objectFit: "cover",
-                  filter: "brightness(0.82)",
-                  display: "block",
-                }}
-              />
+          />
+        )}
 
-              {/* Rating badge */}
-              {cigar.rating && (
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={cigar.id}
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.55}
+            whileDrag={{ rotate: 3, cursor: "grabbing" }}
+            onDragEnd={(_, info) => {
+              if (info.offset.x > 110) handleSwipe("right");
+              else if (info.offset.x < -110) handleSwipe("left");
+            }}
+            initial={{ opacity: 0, y: 22, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, x: exitDir, rotate: exitDir > 0 ? 14 : -14 }}
+            transition={{ duration: 0.28 }}
+            style={{ position: "absolute", inset: 0, cursor: "grab" }}
+          >
+            <Box
+              sx={{
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                borderRadius: "22px",
+                overflow: "hidden",
+                bgcolor: tokens.surface,
+                border: `1px solid ${tokens.line}`,
+                boxShadow: "0 18px 48px rgba(0,0,0,0.6)",
+              }}
+            >
+              {/* photo */}
+              <Box sx={{ position: "relative", flex: 1, minHeight: 210, overflow: "hidden" }}>
+                <Box
+                  component="img"
+                  src={cigar.image}
+                  alt={cigar.name}
+                  loading="eager"
+                  sx={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                />
+                {/* gradient so the title always sits on darkness */}
                 <Box
                   sx={{
                     position: "absolute",
-                    top: 12,
-                    right: 12,
-                    bgcolor: "#D4AF37",
-                    px: 1.5,
-                    py: 0.4,
-                    borderRadius: 2,
+                    inset: 0,
+                    background:
+                      "linear-gradient(180deg, rgba(10,9,8,0.55) 0%, rgba(10,9,8,0) 34%, rgba(20,18,16,0.35) 74%, rgba(20,18,16,1) 100%)",
                   }}
+                />
+
+                <Stack direction="row" sx={{ justifyContent: "space-between", position: "absolute", top: 12, left: 12, right: 12 }}
                 >
-                  <Typography fontSize={12} fontWeight="bold" color="#000">
-                    {cigar.rating} pts
+                  <IconButton
+                    onClick={addToHumidor}
+                    aria-label={inHumidor ? "In your humidor" : "Add to humidor"}
+                    sx={{
+                      width: 36,
+                      height: 36,
+                      bgcolor: inHumidor ? tokens.gold : "rgba(10,9,8,0.6)",
+                      color: inHumidor ? "#0A0908" : "#fff",
+                      backdropFilter: "blur(6px)",
+                      border: `1px solid ${inHumidor ? tokens.gold : "rgba(255,255,255,0.14)"}`,
+                      "&:hover": { bgcolor: inHumidor ? tokens.goldLight : "rgba(10,9,8,0.85)" },
+                    }}
+                  >
+                    {inHumidor ? (
+                      <Inventory2Icon sx={{ fontSize: 17 }} />
+                    ) : (
+                      <Inventory2OutlinedIcon sx={{ fontSize: 17 }} />
+                    )}
+                  </IconButton>
+
+                  {cigar.rating && (
+                    <Stack sx={{ alignItems: "center", justifyContent: "center", px: 1.4,
+                        height: 36,
+                        borderRadius: 2,
+                        bgcolor: "rgba(10,9,8,0.6)",
+                        backdropFilter: "blur(6px)",
+                        border: `1px solid ${tokens.line}` }}
+                    >
+                      <Typography sx={{ fontFamily: tokens.serif, fontSize: 17, fontWeight: 700, color: tokens.goldPale, lineHeight: 1 }}
+                      >
+                        {cigar.rating}
+                      </Typography>
+                      <Typography sx={{ fontSize: 7.5, letterSpacing: 1.1, color: tokens.textFaint, lineHeight: 1.4 }}>
+                        RATED
+                      </Typography>
+                    </Stack>
+                  )}
+                </Stack>
+
+                {/* title over the gradient */}
+                <Box sx={{ position: "absolute", left: 20, right: 20, bottom: 14 }}>
+                  <Typography sx={{ fontSize: 10, fontWeight: 700, letterSpacing: 1.8, color: tokens.gold, mb: 0.5 }}
+                  >
+                    {cigar.brand.toUpperCase()}
+                  </Typography>
+                  <Typography variant="h5" sx={{ fontSize: 23, lineHeight: 1.18 }}>
+                    {cigar.name}
                   </Typography>
                 </Box>
-              )}
-
-              {/* Humidor icon */}
-              <IconButton
-                onClick={addToHumidor}
-                sx={{
-                  position: "absolute",
-                  top: 8,
-                  left: 10,
-                  bgcolor: inHumidor ? "#D4AF37" : "rgba(0,0,0,0.55)",
-                  color: inHumidor ? "#000" : "#fff",
-                  width: 34,
-                  height: 34,
-                  "&:hover": {
-                    bgcolor: inHumidor ? "#c5a030" : "rgba(0,0,0,0.75)",
-                  },
-                }}
-              >
-                <Inventory2Icon sx={{ fontSize: 17 }} />
-              </IconButton>
-            </Box>
-
-            {/* DETAILS */}
-            <CardContent sx={{ px: 2.5, py: 2 }}>
-              <Typography variant="h6" fontWeight="700" lineHeight={1.2}>
-                {cigar.name}
-              </Typography>
-              <Typography sx={{ color: "#D4AF37", fontWeight: 600, fontSize: 14, mt: 0.3 }}>
-                {cigar.brand}
-              </Typography>
-
-              <Stack direction="row" spacing={0.8} mt={1} alignItems="center">
-                <Typography fontSize={12} color="#777">{cigar.wrapper}</Typography>
-                <Typography fontSize={12} color="#444">•</Typography>
-                <Typography fontSize={12} color="#777">{cigar.strength}</Typography>
-                {cigar.origin && (
-                  <>
-                    <Typography fontSize={12} color="#444">•</Typography>
-                    <Typography fontSize={12} color="#777">{cigar.origin}</Typography>
-                  </>
-                )}
-                {cigar.price && (
-                  <>
-                    <Typography fontSize={12} color="#444">•</Typography>
-                    <Typography fontSize={12} color="#777">{cigar.price}</Typography>
-                  </>
-                )}
-              </Stack>
-
-              <Typography mt={1} fontSize={13} color="#bbb">
-                {cigar.flavorNotes.join("  ·  ")}
-              </Typography>
-
-              {/* WHY THIS MATCHES */}
-              <Box mt={1.5}>
-                {cigar.strength === user.strength && (
-                  <Typography fontSize={11} color="#888">✔ Matches your strength preference</Typography>
-                )}
-                {cigar.wrapper === user.wrapper && (
-                  <Typography fontSize={11} color="#888">✔ Matches your wrapper preference</Typography>
-                )}
-                {user.brands?.includes(cigar.brand) && (
-                  <Typography fontSize={11} color="#888">✔ One of your favorite brands</Typography>
-                )}
-                {liked.some((c) => c.strength === cigar.strength) && (
-                  <Typography fontSize={11} color="#888">✔ Similar to cigars you liked</Typography>
-                )}
-                {liked.some((c) =>
-                  c.flavorNotes.some((note) => cigar.flavorNotes.includes(note))
-                ) && (
-                  <Typography fontSize={11} color="#888">✔ Shares flavor notes you enjoy</Typography>
-                )}
               </Box>
 
-              {/* PAIRING */}
-              {pairing && (
-                <Box
-                  sx={{
-                    bgcolor: "#1a1a1a",
-                    px: 1.5,
-                    py: 1,
-                    borderRadius: 2,
-                    mt: 1.5,
-                    borderLeft: "3px solid #D4AF37",
-                  }}
-                >
-                  <Typography fontSize={11} color="#D4AF37" fontWeight="bold">
-                    Pairs with: {pairing.drink}
+              {/* details */}
+              <Box sx={{ flexShrink: 0, maxHeight: "58%", overflowY: "auto", px: 2.5, pt: 1.8, pb: 2.2 }}>
+                <Stack direction="row" spacing={1} useFlexGap sx={{ alignItems: "center", flexWrap: "wrap" }}>
+                  <Meta>{cigar.wrapper}</Meta>
+                  <Box sx={{ width: 3, height: 3, borderRadius: "50%", bgcolor: tokens.textFaint }} />
+                  <Meta>{cigar.strength}</Meta>
+                  <Box sx={{ width: 3, height: 3, borderRadius: "50%", bgcolor: tokens.textFaint }} />
+                  <Meta>{cigar.origin}</Meta>
+                  <Box sx={{ flex: 1 }} />
+                  <Typography sx={{ fontFamily: tokens.serif, fontSize: 17, fontWeight: 600, color: tokens.goldPale }}>
+                    {cigar.price}
                   </Typography>
-                  <Typography fontSize={11} color="#777">
-                    {pairing.recommendation}
-                  </Typography>
-                </Box>
-              )}
-            </CardContent>
-          </Card>
-        </motion.div>
-      </AnimatePresence>
+                </Stack>
 
-      {/* ACTION BUTTONS */}
-      <Stack
-        direction="row"
-        spacing={2}
-        mt={2}
-        sx={{ width: "100%", maxWidth: 360 }}
-      >
-        <Button
-          fullWidth
-          variant="outlined"
+                {/* flavor notes */}
+                <Stack direction="row" sx={{ mt: 1.6, gap: 0.8, flexWrap: "wrap" }}>
+                  {cigar.flavorNotes.map((note) => (
+                    <Box
+                      key={note}
+                      sx={{
+                        px: 1.2,
+                        py: 0.5,
+                        borderRadius: 999,
+                        bgcolor: "rgba(212,175,55,0.08)",
+                        border: `1px solid ${tokens.line}`,
+                        fontSize: 11.5,
+                        color: tokens.goldPale,
+                        textTransform: "capitalize",
+                      }}
+                    >
+                      {note}
+                    </Box>
+                  ))}
+                </Stack>
+
+                {/* why it surfaced */}
+                {reasons.length > 0 && (
+                  <Box sx={{ mt: 2 }}>
+                    <Typography sx={{ fontSize: 9.5, fontWeight: 700, letterSpacing: 1.6, color: tokens.textFaint, mb: 0.9 }}>
+                      WHY THIS MATCHES
+                    </Typography>
+                    <Stack spacing={0.6}>
+                      {reasons.map((r) => (
+                        <Stack key={r} direction="row" spacing={1} sx={{ alignItems: "center" }}>
+                          <Box sx={{ width: 4, height: 4, borderRadius: "50%", bgcolor: tokens.gold, flexShrink: 0 }} />
+                          <Typography sx={{ fontSize: 12, color: tokens.textMuted }}>
+                            {r}
+                          </Typography>
+                        </Stack>
+                      ))}
+                    </Stack>
+                  </Box>
+                )}
+
+                {/* pairing */}
+                {pairing && (
+                  <Box
+                    sx={{
+                      mt: 2,
+                      px: 1.8,
+                      py: 1.4,
+                      borderRadius: 2.5,
+                      bgcolor: tokens.surfaceHi,
+                      borderLeft: `2px solid ${tokens.gold}`,
+                    }}
+                  >
+                    <Stack direction="row" spacing={0.8} sx={{ alignItems: "center" }}>
+                      <LocalBarIcon sx={{ fontSize: 14, color: tokens.gold }} />
+                      <Typography sx={{ fontSize: 12, fontWeight: 700, color: tokens.goldPale }}>
+                        Pair with {pairing.drink}
+                      </Typography>
+                    </Stack>
+                    <Typography sx={{ fontSize: 11.5, color: tokens.textMuted, mt: 0.4 }}>
+                      {pairing.recommendation} · {pairing.vibe}
+                    </Typography>
+                  </Box>
+                )}
+              </Box>
+            </Box>
+          </motion.div>
+        </AnimatePresence>
+      </Box>
+
+      {/* actions */}
+      <Stack direction="row" spacing={2} sx={{ mt: 2, alignItems: "center", justifyContent: "center" }}>
+        <IconButton
           onClick={() => handleSwipe("left")}
+          aria-label="Pass"
           sx={{
-            borderColor: "#333",
-            color: "#fff",
-            borderRadius: 3,
-            py: 1.5,
-            fontWeight: "bold",
-            letterSpacing: 1,
-            "&:hover": { borderColor: "#888" },
+            width: 58,
+            height: 58,
+            border: `1px solid ${tokens.lineSoft}`,
+            color: tokens.textMuted,
+            "&:hover": { borderColor: "#6B635A", color: tokens.text },
           }}
         >
-          PASS
-        </Button>
-        <Button
-          fullWidth
-          variant="contained"
+          <CloseIcon sx={{ fontSize: 25 }} />
+        </IconButton>
+
+        <IconButton
           onClick={() => handleSwipe("right")}
+          aria-label="Like"
           sx={{
-            bgcolor: "#D4AF37",
-            color: "#000",
-            borderRadius: 3,
-            fontWeight: "bold",
-            py: 1.5,
-            letterSpacing: 1,
-            boxShadow: "0 4px 18px rgba(212,175,55,0.28)",
-            "&:hover": { bgcolor: "#c5a030" },
+            width: 68,
+            height: 68,
+            bgcolor: tokens.gold,
+            color: "#0A0908",
+            boxShadow: "0 8px 26px rgba(212,175,55,0.32)",
+            "&:hover": { bgcolor: tokens.goldLight },
           }}
         >
-          LIKE
-        </Button>
+          <FavoriteIcon sx={{ fontSize: 27 }} />
+        </IconButton>
+
+        <IconButton
+          onClick={addToHumidor}
+          aria-label="Add to humidor"
+          sx={{
+            width: 58,
+            height: 58,
+            border: `1px solid ${inHumidor ? tokens.gold : tokens.lineSoft}`,
+            color: inHumidor ? tokens.gold : tokens.textMuted,
+            "&:hover": { borderColor: tokens.gold, color: tokens.gold },
+          }}
+        >
+          <Inventory2OutlinedIcon sx={{ fontSize: 22 }} />
+        </IconButton>
       </Stack>
+
+      <Typography sx={{ fontSize: 10.5, color: tokens.textFaint, mt: 1.2, letterSpacing: 0.4, textAlign: "center" }}>
+        Swipe the card, or use the buttons
+      </Typography>
     </Box>
   );
 }
