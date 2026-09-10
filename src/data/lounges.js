@@ -3,6 +3,8 @@
  * metro, but hours, phone numbers (all 555-) and humidor contents are sample
  * data — swap this file for a Places/Yelp feed before launch.
  */
+import { BOUTIQUE_IDS } from "./cigars";
+
 const img = (id, w = 900) =>
   `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=80`;
 
@@ -62,9 +64,11 @@ const lounges = [
     reviews: 178,
     phone: "(972) 555-0456",
     hours: "Mon–Sat 10am–11pm  •  Sun 12pm–9pm",
-    amenities: ["Craft Beer", "WiFi", "Outdoor Patio", "Walk-in Humidor"],
+    amenities: ["Craft Beer", "WiFi", "Outdoor Patio", "Walk-in Humidor", "Boutique Brands"],
     events: ["Craft Beer & Cigars — Fridays 6pm"],
-    inventory: [2, 3, 6, 8, 11],
+    // The boutique wall is this shop's draw — Atabey through Dunbarton — on top
+    // of a handful of the usual staples.
+    inventory: [2, 3, 6, 8, 11, ...BOUTIQUE_IDS],
     image: img(P.brightBar),
   },
   {

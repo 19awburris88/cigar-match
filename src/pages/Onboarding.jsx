@@ -31,14 +31,22 @@ const WRAPPER = [
 ];
 
 const FLAVOR_OPTIONS = [
-  "Cocoa", "Coffee", "Pepper", "Cedar", "Sweet", "Earth",
-  "Cream", "Nuts", "Leather", "Spice", "Vanilla", "Toast",
+  "Cocoa", "Coffee", "Espresso", "Pepper", "Cedar", "Sweet",
+  "Earth", "Cream", "Nuts", "Leather", "Spice", "Vanilla",
+  "Toast", "Caramel", "Honey",
 ];
 
+/**
+ * Every house in the catalog, so a brand someone picks here can always be
+ * matched by `matchesBrand`. Big names first, then the boutique shelf.
+ */
 const BRAND_OPTIONS = [
   "Padron", "Arturo Fuente", "My Father", "Oliva",
   "Rocky Patel", "Drew Estate", "Cohiba", "Romeo y Julieta",
   "Davidoff", "Montecristo",
+  "Atabey", "Foundation", "Crux", "Principle", "Definition",
+  "Gran Habano", "Luciano", "La Palina", "Bandolero", "Warped",
+  "Aganorsa Leaf", "Illusione", "RoMa Craft", "Dunbarton",
 ];
 
 const PAIRING_OPTIONS = [

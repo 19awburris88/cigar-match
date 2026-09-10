@@ -25,7 +25,7 @@ export function getPairing(cigar) {
     };
   }
 
-  if (notes.some((n) => ["cream", "vanilla", "honey", "floral"].includes(n))) {
+  if (notes.some((n) => ["cream", "vanilla", "honey", "floral", "hay"].includes(n))) {
     return {
       drink: "Coffee",
       recommendation: "Espresso or Cappuccino",
@@ -33,7 +33,7 @@ export function getPairing(cigar) {
     };
   }
 
-  if (notes.some((n) => ["sweet", "cinnamon", "toast"].includes(n))) {
+  if (notes.some((n) => ["sweet", "cinnamon", "toast", "caramel", "raisin"].includes(n))) {
     return {
       drink: "Rum",
       recommendation: "Diplomatico Reserva or Zaya",

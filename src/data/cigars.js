@@ -1,7 +1,8 @@
 /**
- * Photography: hand-picked Unsplash frames, one per cigar so no two cards
- * repeat. These are editorial cigar photographs, not manufacturer product
- * shots — they set the mood for the blend rather than depict that exact stick.
+ * Photography: hand-picked Unsplash frames. These are editorial cigar
+ * photographs, not manufacturer product shots — they set the mood for the
+ * blend rather than depict that exact stick. The core fifteen get one frame
+ * each; the boutique shelf is larger than the pool, so those cycle through it.
  */
 const img = (id, w = 900) =>
   `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=80`;
@@ -24,7 +25,7 @@ const PHOTO = {
   fieldLeaf: "1528446558593-05d60f8d4ae9",    // tobacco hanging in the barn
 };
 
-const cigars = [
+const classics = [
   {
     id: 1,
     name: "Padron 1964 Anniversary Maduro",
@@ -207,4 +208,354 @@ const cigars = [
   },
 ];
 
-export default cigars;
+/**
+ * The boutique shelf — the houses Industrial Cigar Co. actually carries, so
+ * there's real inventory to test ranking and lounge matching against.
+ *
+ * `wrapper` stays inside the six-term vocabulary the onboarding wrapper step
+ * offers, because that's what scoring compares; `wrapperDetail` carries the
+ * leaf as the house describes it. Blend details and prices are best-effort
+ * from public info — reconcile them against the lounge's own humidor list
+ * before this data is shown as authoritative.
+ */
+const PHOTO_POOL = Object.values(PHOTO);
+
+const boutique = [
+  // ——— ATABEY · Selected Tobacco, Costa Rica ———
+  {
+    name: "Atabey Ritos",
+    brand: "Atabey",
+    wrapper: "Natural",
+    wrapperDetail: "Ecuadorian Habano Claro",
+    strength: "Medium",
+    flavorNotes: ["cedar", "cream", "floral"],
+    origin: "Costa Rica",
+    price: "$32",
+    rating: 95,
+  },
+  {
+    name: "Atabey Brumas",
+    brand: "Atabey",
+    wrapper: "Natural",
+    wrapperDetail: "Ecuadorian Habano Claro",
+    strength: "Medium",
+    flavorNotes: ["hay", "nuts", "honey"],
+    origin: "Costa Rica",
+    price: "$38",
+    rating: 96,
+  },
+
+  // ——— DEFINITION ———
+  {
+    name: "Definition Habano",
+    brand: "Definition",
+    wrapper: "Habano",
+    wrapperDetail: "Ecuadorian Habano",
+    strength: "Medium-Full",
+    flavorNotes: ["cedar", "pepper", "caramel"],
+    origin: "Nicaragua",
+    price: "$14",
+    rating: 92,
+  },
+  {
+    name: "Definition Maduro",
+    brand: "Definition",
+    wrapper: "Maduro",
+    wrapperDetail: "Mexican San Andrés",
+    strength: "Full",
+    flavorNotes: ["cocoa", "espresso", "raisin"],
+    origin: "Nicaragua",
+    price: "$15",
+    rating: 93,
+  },
+
+  // ——— CRUX ———
+  {
+    name: "Crux Epicure",
+    brand: "Crux",
+    wrapper: "Connecticut",
+    wrapperDetail: "Ecuadorian Connecticut",
+    strength: "Mild-Medium",
+    flavorNotes: ["cream", "nuts", "toast"],
+    origin: "Nicaragua",
+    price: "$11",
+    rating: 91,
+  },
+  {
+    name: "Crux Du Connoisseur No. 2",
+    brand: "Crux",
+    wrapper: "Habano",
+    wrapperDetail: "Nicaraguan Habano",
+    strength: "Medium-Full",
+    flavorNotes: ["cedar", "pepper", "cocoa"],
+    origin: "Nicaragua",
+    price: "$13",
+    rating: 92,
+  },
+  {
+    name: "Crux Bull & Bear",
+    brand: "Crux",
+    wrapper: "Maduro",
+    wrapperDetail: "Ecuadorian Oscuro",
+    strength: "Full",
+    flavorNotes: ["coffee", "leather", "spice"],
+    origin: "Nicaragua",
+    price: "$15",
+    rating: 93,
+  },
+
+  // ——— PRINCIPLE · Dominican Republic ———
+  {
+    name: "Principle Aguilas Maduro",
+    brand: "Principle",
+    wrapper: "Maduro",
+    wrapperDetail: "Connecticut Broadleaf",
+    strength: "Medium-Full",
+    flavorNotes: ["cocoa", "coffee", "sweet"],
+    origin: "Dominican Republic",
+    price: "$13",
+    rating: 92,
+  },
+  {
+    name: "Principle Archive Barrel-Aged",
+    brand: "Principle",
+    wrapper: "Habano",
+    wrapperDetail: "Ecuadorian Habano",
+    strength: "Medium",
+    flavorNotes: ["cedar", "vanilla", "spice"],
+    origin: "Dominican Republic",
+    price: "$14",
+    rating: 93,
+  },
+
+  // ——— FOUNDATION · Nicholas Melillo ———
+  {
+    name: "Foundation El Güegüense",
+    brand: "Foundation",
+    wrapper: "Corojo",
+    wrapperDetail: "Nicaraguan Corojo 99",
+    strength: "Medium-Full",
+    flavorNotes: ["cedar", "pepper", "earth"],
+    origin: "Nicaragua",
+    price: "$12",
+    rating: 94,
+  },
+  {
+    name: "Foundation The Tabernacle",
+    brand: "Foundation",
+    wrapper: "Maduro",
+    wrapperDetail: "Connecticut Broadleaf",
+    strength: "Full",
+    flavorNotes: ["cocoa", "espresso", "pepper"],
+    origin: "Nicaragua",
+    price: "$13",
+    rating: 95,
+  },
+  {
+    name: "Foundation Charter Oak Shade",
+    brand: "Foundation",
+    wrapper: "Connecticut",
+    wrapperDetail: "Connecticut Shade",
+    strength: "Mild-Medium",
+    flavorNotes: ["cream", "toast", "nuts"],
+    origin: "Nicaragua",
+    price: "$7",
+    rating: 90,
+  },
+  {
+    name: "Foundation Olmec Claro",
+    brand: "Foundation",
+    wrapper: "Natural",
+    wrapperDetail: "Mexican San Andrés Claro",
+    strength: "Medium",
+    flavorNotes: ["earth", "cedar", "spice"],
+    origin: "Nicaragua",
+    price: "$11",
+    rating: 92,
+  },
+  {
+    name: "Foundation Highclere Castle Victorian",
+    brand: "Foundation",
+    wrapper: "Connecticut",
+    wrapperDetail: "Ecuadorian Connecticut",
+    strength: "Mild-Medium",
+    flavorNotes: ["cream", "hay", "honey"],
+    origin: "Nicaragua",
+    price: "$12",
+    rating: 93,
+  },
+
+  // ——— GRAN HABANO · George Rico, Danlí ———
+  {
+    name: "Gran Habano Corojo #5",
+    brand: "Gran Habano",
+    wrapper: "Corojo",
+    wrapperDetail: "Nicaraguan Corojo",
+    strength: "Medium-Full",
+    flavorNotes: ["pepper", "spice", "earth"],
+    origin: "Honduras",
+    price: "$8",
+    rating: 91,
+  },
+  {
+    name: "Gran Habano #3 Habano",
+    brand: "Gran Habano",
+    wrapper: "Habano",
+    wrapperDetail: "Nicaraguan Habano",
+    strength: "Medium",
+    flavorNotes: ["cedar", "sweet", "nuts"],
+    origin: "Honduras",
+    price: "$7",
+    rating: 89,
+  },
+  {
+    name: "Gran Habano Vintage 2002",
+    brand: "Gran Habano",
+    wrapper: "Maduro",
+    wrapperDetail: "Aged Nicaraguan",
+    strength: "Full",
+    flavorNotes: ["cocoa", "leather", "coffee"],
+    origin: "Honduras",
+    price: "$10",
+    rating: 92,
+  },
+
+  // ——— LUCIANO · Luciano Meirelles ———
+  {
+    name: "Luciano The Traveler",
+    brand: "Luciano",
+    wrapper: "Maduro",
+    wrapperDetail: "Mexican San Andrés",
+    strength: "Medium-Full",
+    flavorNotes: ["cocoa", "coffee", "earth"],
+    origin: "Nicaragua",
+    price: "$13",
+    rating: 93,
+  },
+  {
+    name: "Luciano The Dress Code",
+    brand: "Luciano",
+    wrapper: "Habano",
+    wrapperDetail: "Ecuadorian Habano",
+    strength: "Medium",
+    flavorNotes: ["cedar", "caramel", "spice"],
+    origin: "Nicaragua",
+    price: "$16",
+    rating: 94,
+  },
+
+  // ——— LA PALINA · Bill Paley ———
+  {
+    name: "La Palina Black Label",
+    brand: "La Palina",
+    wrapper: "Maduro",
+    wrapperDetail: "Ecuadorian Oscuro",
+    strength: "Medium-Full",
+    flavorNotes: ["cocoa", "coffee", "leather"],
+    origin: "Honduras",
+    price: "$9",
+    rating: 91,
+  },
+  {
+    name: "La Palina Goldies Laguito No. 2",
+    brand: "La Palina",
+    wrapper: "Natural",
+    wrapperDetail: "Ecuadorian Habano",
+    strength: "Medium-Full",
+    flavorNotes: ["cedar", "earth", "spice"],
+    origin: "United States",
+    price: "$30",
+    rating: 95,
+  },
+
+  // ——— BANDOLERO ———
+  {
+    name: "Bandolero Picaros",
+    brand: "Bandolero",
+    wrapper: "Habano",
+    wrapperDetail: "Nicaraguan Habano",
+    strength: "Medium",
+    flavorNotes: ["cedar", "spice", "sweet"],
+    origin: "Nicaragua",
+    price: "$12",
+    rating: 92,
+  },
+  {
+    name: "Bandolero Guapos",
+    brand: "Bandolero",
+    wrapper: "Maduro",
+    wrapperDetail: "Nicaraguan Oscuro",
+    strength: "Full",
+    flavorNotes: ["espresso", "pepper", "leather"],
+    origin: "Nicaragua",
+    price: "$14",
+    rating: 93,
+  },
+
+  // ——— AND THE REST OF THE BOUTIQUE WALL ———
+  {
+    name: "Warped Flor del Valle",
+    brand: "Warped",
+    wrapper: "Corojo",
+    wrapperDetail: "Nicaraguan Corojo",
+    strength: "Medium",
+    flavorNotes: ["cedar", "cream", "spice"],
+    origin: "Nicaragua",
+    price: "$11",
+    rating: 93,
+  },
+  {
+    name: "Aganorsa Leaf Signature Maduro",
+    brand: "Aganorsa Leaf",
+    wrapper: "Maduro",
+    wrapperDetail: "Nicaraguan Maduro",
+    strength: "Medium-Full",
+    flavorNotes: ["cocoa", "earth", "pepper"],
+    origin: "Nicaragua",
+    price: "$10",
+    rating: 93,
+  },
+  {
+    name: "Illusione Epernay Le Ferme",
+    brand: "Illusione",
+    wrapper: "Corojo",
+    wrapperDetail: "Nicaraguan Café Corojo",
+    strength: "Medium",
+    flavorNotes: ["cream", "cedar", "toast"],
+    origin: "Nicaragua",
+    price: "$12",
+    rating: 94,
+  },
+  {
+    name: "RoMa Craft CroMagnon",
+    brand: "RoMa Craft",
+    wrapper: "Maduro",
+    wrapperDetail: "Connecticut Broadleaf",
+    strength: "Full",
+    flavorNotes: ["espresso", "leather", "pepper"],
+    origin: "Nicaragua",
+    price: "$11",
+    rating: 94,
+  },
+  {
+    name: "Dunbarton Sobremesa",
+    brand: "Dunbarton",
+    wrapper: "Habano",
+    wrapperDetail: "Ecuadorian Habano Rosado",
+    strength: "Medium-Full",
+    flavorNotes: ["cocoa", "cedar", "spice"],
+    origin: "Nicaragua",
+    price: "$14",
+    rating: 95,
+  },
+].map((cigar, i) => ({
+  ...cigar,
+  id: classics.length + 1 + i,
+  boutique: true,
+  image: img(PHOTO_POOL[i % PHOTO_POOL.length]),
+}));
+
+/** Ids stay stable: classics hold 1–15, the boutique shelf continues from 16. */
+export const BOUTIQUE_IDS = boutique.map((c) => c.id);
+
+export default [...classics, ...boutique];
