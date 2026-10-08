@@ -15,6 +15,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import lounges, { METROS } from "../data/lounges";
 import cigars from "../data/cigars";
+import { track } from "../utils/events";
 import { tokens } from "../theme";
 
 const SEED_CHECKINS = [
@@ -69,6 +70,13 @@ export default function CheckIn({ user, checkins, setCheckins, setView }) {
   const handlePost = () => {
     const lounge = lounges.find((l) => l.id === loungeId);
     const cigar = cigars.find((c) => c.id === cigarId);
+    track("checkin_post", {
+      loungeId: lounge.id,
+      loungeName: lounge.name,
+      cigarId: cigar.id,
+      brand: cigar.brand,
+      hasNote: Boolean(note.trim()),
+    });
     setCheckins([
       {
         id: Date.now(),

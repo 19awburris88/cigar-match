@@ -8,6 +8,7 @@ import { rankCigars } from "../utils/recommend";
 import { topReason } from "../utils/reasons";
 import { asList, listSummary } from "../utils/prefs";
 import CigarTile from "../components/CigarTile";
+import { track } from "../utils/events";
 import { tokens } from "../theme";
 
 const EXPERIENCE_COLOR = {
@@ -219,7 +220,10 @@ export default function Profile({ user, liked, humidor = [], setHumidor, setView
                   cigar={cigar}
                   reason={topReason(cigar, user, liked)}
                   inHumidor={humidor.some((c) => c.id === cigar.id)}
-                  onAdd={() => setHumidor?.((h) => (h.some((c) => c.id === cigar.id) ? h : [...h, cigar]))}
+                  onAdd={() => {
+                    track("humidor_add", { cigarId: cigar.id, brand: cigar.brand, from: "profile" });
+                    setHumidor?.((h) => (h.some((c) => c.id === cigar.id) ? h : [...h, cigar]));
+                  }}
                 />
               ))}
             </Stack>

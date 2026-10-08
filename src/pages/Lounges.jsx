@@ -9,6 +9,7 @@ import EventIcon from "@mui/icons-material/Event";
 import StarIcon from "@mui/icons-material/Star";
 import lounges, { METROS } from "../data/lounges";
 import cigars from "../data/cigars";
+import { track } from "../utils/events";
 import { tokens } from "../theme";
 
 function Rating({ value, size = "sm" }) {
@@ -85,7 +86,10 @@ export default function Lounges({ setView }) {
           return (
             <ButtonBase
               key={m}
-              onClick={() => setMetro(m)}
+              onClick={() => {
+                track("metro_filter", { metro: m });
+                setMetro(m);
+              }}
               sx={{
                 flexShrink: 0,
                 px: 1.9,
@@ -118,7 +122,10 @@ export default function Lounges({ setView }) {
               transition={{ duration: 0.28, delay: i * 0.045 }}
             >
               <ButtonBase
-                onClick={() => setSelected(lounge)}
+                onClick={() => {
+                  track("lounge_open", { loungeId: lounge.id, name: lounge.name, metro: lounge.metro });
+                  setSelected(lounge);
+                }}
                 sx={{
                   display: "block",
                   width: "100%",

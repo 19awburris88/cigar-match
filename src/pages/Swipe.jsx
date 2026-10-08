@@ -12,6 +12,7 @@ import { rankCigars } from "../utils/recommend";
 import { getPairing } from "../utils/pairing";
 import { matchReasons } from "../utils/reasons";
 import Logo from "../components/Logo";
+import { track } from "../utils/events";
 import { tokens } from "../theme";
 
 function Meta({ children }) {
@@ -22,8 +23,16 @@ function Meta({ children }) {
   );
 }
 
-export default function Swipe({ user, liked, setLiked, humidor, setHumidor, setView }) {
-  const [passed, setPassed] = useState([]);
+export default function Swipe({
+  user,
+  liked,
+  setLiked,
+  passed,
+  setPassed,
+  humidor,
+  setHumidor,
+  setView,
+}) {
   const [exitDir, setExitDir] = useState(0);
 
   const seen = [...liked, ...passed].map((c) => c.id);
@@ -37,12 +46,15 @@ export default function Swipe({ user, liked, setLiked, humidor, setHumidor, setV
 
   const handleSwipe = (direction) => {
     setExitDir(direction === "right" ? 420 : -420);
+    track("swipe", { cigarId: cigar.id, brand: cigar.brand, dir: direction, seen: seen.length });
     if (direction === "right") setLiked((prev) => [...prev, cigar]);
     else setPassed((prev) => [...prev, cigar]);
   };
 
   const addToHumidor = () => {
-    if (!inHumidor) setHumidor((prev) => [...prev, cigar]);
+    if (inHumidor) return;
+    track("humidor_add", { cigarId: cigar.id, brand: cigar.brand, from: "swipe" });
+    setHumidor((prev) => [...prev, cigar]);
   };
 
   const header = (

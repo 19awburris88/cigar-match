@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Box, Button, Typography, Stack, TextField, ButtonBase } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
 import CheckIcon from "@mui/icons-material/Check";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Logo, { LogoMark } from "../components/Logo";
+import { track } from "../utils/events";
 import { tokens } from "../theme";
 
 const EXPERIENCE = [
@@ -48,6 +49,9 @@ const BRAND_OPTIONS = [
   "Gran Habano", "Luciano", "La Palina", "Bandolero", "Warped",
   "Aganorsa Leaf", "Illusione", "RoMa Craft", "Dunbarton",
 ];
+
+/** Order of the profile questions; mirrored in `steps` below. */
+const STEP_KEYS = ["name", "experience", "strength", "wrapper", "flavors", "brands", "pairings"];
 
 const PAIRING_OPTIONS = [
   "Bourbon", "Scotch", "Rum", "Coffee", "Espresso", "Beer", "Red Wine", "Tequila",
@@ -162,6 +166,12 @@ export default function Onboarding({ setUser }) {
     pairings: [],
   });
 
+  // One event per step shown: the last one recorded for a device that never
+  // completed is exactly where that person gave up.
+  useEffect(() => {
+    if (started) track("onboarding_step", { step, key: STEP_KEYS[step] });
+  }, [started, step]);
+
   const toggle = (field, value) =>
     setForm((f) => ({
       ...f,
@@ -169,6 +179,20 @@ export default function Onboarding({ setUser }) {
         ? f[field].filter((v) => v !== value)
         : [...f[field], value],
     }));
+
+  const finish = (via) => {
+    track("onboarding_complete", {
+      via,
+      experience: form.experience,
+      strengths: form.strength.length,
+      wrappers: form.wrapper.length,
+      flavors: form.flavors.length,
+      brands: form.brands.length,
+      pairings: form.pairings.length,
+      named: Boolean(form.name.trim()),
+    });
+    setUser(form);
+  };
 
   const steps = [
     {
@@ -362,7 +386,10 @@ export default function Onboarding({ setUser }) {
           <Button
             fullWidth
             variant="contained"
-            onClick={() => setStarted(true)}
+            onClick={() => {
+            track("onboarding_start");
+            setStarted(true);
+          }}
             sx={{ mt: 5, py: 1.8, borderRadius: 3, fontSize: 15 }}
           >
             Build my profile
@@ -443,7 +470,7 @@ export default function Onboarding({ setUser }) {
           fullWidth
           variant="contained"
           disabled={!current.valid}
-          onClick={() => (isLast ? setUser(form) : setStep((s) => s + 1))}
+          onClick={() => (isLast ? finish("continue") : setStep((s) => s + 1))}
           sx={{
             py: 1.8,
             borderRadius: 3,
@@ -457,7 +484,10 @@ export default function Onboarding({ setUser }) {
         {optional && (
           <Button
             fullWidth
-            onClick={() => (isLast ? setUser(form) : setStep((s) => s + 1))}
+            onClick={() => {
+              track("onboarding_skip", { step, key: current.key });
+              return isLast ? finish("skip") : setStep((s) => s + 1);
+            }}
             sx={{ color: tokens.textFaint, fontSize: 13, "&:hover": { color: tokens.copper, bgcolor: "transparent" } }}
           >
             Skip this step

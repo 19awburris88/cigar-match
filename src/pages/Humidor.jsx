@@ -1,10 +1,14 @@
 import { Box, Typography, Button } from "@mui/material";
 import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
 import CigarTile from "../components/CigarTile";
+import { track } from "../utils/events";
 import { tokens } from "../theme";
 
 export default function Humidor({ humidor, setHumidor, setView }) {
-  const remove = (id) => setHumidor((h) => h.filter((c) => c.id !== id));
+  const remove = (id) => {
+    track("humidor_remove", { cigarId: id });
+    setHumidor((h) => h.filter((c) => c.id !== id));
+  };
 
   if (humidor.length === 0) {
     return (
