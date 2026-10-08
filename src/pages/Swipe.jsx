@@ -47,7 +47,7 @@ export default function Swipe({ user, liked, setLiked, humidor, setHumidor, setV
 
   const header = (
     <Stack direction="row" sx={{ mb: 2, justifyContent: "space-between", alignItems: "center" }}>
-      <Logo size={19} />
+      <Logo size={20} />
       <ButtonBase
         onClick={() => setView("checkin")}
         sx={{
@@ -58,10 +58,10 @@ export default function Swipe({ user, liked, setLiked, humidor, setHumidor, setV
           py: 0.8,
           borderRadius: 2.5,
           border: `1px solid ${tokens.line}`,
-          color: tokens.gold,
+          color: tokens.copper,
           fontSize: 12,
           fontWeight: 600,
-          "&:hover": { borderColor: tokens.gold, bgcolor: "rgba(212,175,55,0.06)" },
+          "&:hover": { borderColor: tokens.copper, bgcolor: tokens.copperWash },
         }}
       >
         <AddLocationAltOutlinedIcon sx={{ fontSize: 15 }} />
@@ -96,7 +96,7 @@ export default function Swipe({ user, liked, setLiked, humidor, setHumidor, setV
             mb: 2.5,
           }}
         >
-          <LocalBarIcon sx={{ fontSize: 28, color: tokens.gold }} />
+          <LocalBarIcon sx={{ fontSize: 28, color: tokens.copper }} />
         </Box>
         <Typography variant="h5" sx={{ fontSize: 23 }}>
           That's the whole humidor
@@ -161,7 +161,7 @@ export default function Swipe({ user, liked, setLiked, humidor, setHumidor, setV
                 overflow: "hidden",
                 bgcolor: tokens.surface,
                 border: `1px solid ${tokens.line}`,
-                boxShadow: "0 18px 48px rgba(0,0,0,0.6)",
+                boxShadow: "0 14px 36px rgba(19,18,16,0.13)",
               }}
             >
               {/* photo */}
@@ -179,7 +179,7 @@ export default function Swipe({ user, liked, setLiked, humidor, setHumidor, setV
                     position: "absolute",
                     inset: 0,
                     background:
-                      "linear-gradient(180deg, rgba(10,9,8,0.55) 0%, rgba(10,9,8,0) 34%, rgba(20,18,16,0.35) 74%, rgba(20,18,16,1) 100%)",
+                      "linear-gradient(180deg, rgba(19,18,16,0.5) 0%, rgba(19,18,16,0) 32%, rgba(19,18,16,0.55) 72%, rgba(19,18,16,0.92) 100%)",
                   }}
                 />
 
@@ -191,11 +191,11 @@ export default function Swipe({ user, liked, setLiked, humidor, setHumidor, setV
                     sx={{
                       width: 36,
                       height: 36,
-                      bgcolor: inHumidor ? tokens.gold : "rgba(10,9,8,0.6)",
-                      color: inHumidor ? "#0A0908" : "#fff",
+                      bgcolor: inHumidor ? tokens.copper : tokens.scrim,
+                      color: tokens.cream,
                       backdropFilter: "blur(6px)",
-                      border: `1px solid ${inHumidor ? tokens.gold : "rgba(255,255,255,0.14)"}`,
-                      "&:hover": { bgcolor: inHumidor ? tokens.goldLight : "rgba(10,9,8,0.85)" },
+                      border: `1px solid ${inHumidor ? tokens.copper : "rgba(250,246,239,0.22)"}`,
+                      "&:hover": { bgcolor: inHumidor ? tokens.copperDeep : "rgba(19,18,16,0.82)" },
                     }}
                   >
                     {inHumidor ? (
@@ -209,15 +209,15 @@ export default function Swipe({ user, liked, setLiked, humidor, setHumidor, setV
                     <Stack sx={{ alignItems: "center", justifyContent: "center", px: 1.4,
                         height: 36,
                         borderRadius: 2,
-                        bgcolor: "rgba(10,9,8,0.6)",
+                        bgcolor: tokens.scrim,
                         backdropFilter: "blur(6px)",
-                        border: `1px solid ${tokens.line}` }}
+                        border: `1px solid rgba(250,246,239,0.18)` }}
                     >
-                      <Typography sx={{ fontFamily: tokens.serif, fontSize: 17, fontWeight: 700, color: tokens.goldPale, lineHeight: 1 }}
+                      <Typography sx={{ fontFamily: tokens.serif, fontSize: 17, fontWeight: 700, color: tokens.onImage, lineHeight: 1 }}
                       >
                         {cigar.rating}
                       </Typography>
-                      <Typography sx={{ fontSize: 7.5, letterSpacing: 1.1, color: tokens.textFaint, lineHeight: 1.4 }}>
+                      <Typography sx={{ fontSize: 7.5, letterSpacing: 1.1, color: tokens.onImageMuted, lineHeight: 1.4 }}>
                         RATED
                       </Typography>
                     </Stack>
@@ -226,11 +226,11 @@ export default function Swipe({ user, liked, setLiked, humidor, setHumidor, setV
 
                 {/* title over the gradient */}
                 <Box sx={{ position: "absolute", left: 20, right: 20, bottom: 14 }}>
-                  <Typography sx={{ fontSize: 10, fontWeight: 700, letterSpacing: 1.8, color: tokens.gold, mb: 0.5 }}
+                  <Typography sx={{ fontSize: 10, fontWeight: 700, letterSpacing: 1.8, color: tokens.onImageAccent, mb: 0.5 }}
                   >
                     {cigar.brand.toUpperCase()}
                   </Typography>
-                  <Typography variant="h5" sx={{ fontSize: 23, lineHeight: 1.18 }}>
+                  <Typography variant="h5" sx={{ fontSize: 23, lineHeight: 1.18, color: tokens.onImage }}>
                     {cigar.name}
                   </Typography>
                 </Box>
@@ -245,7 +245,7 @@ export default function Swipe({ user, liked, setLiked, humidor, setHumidor, setV
                   <Box sx={{ width: 3, height: 3, borderRadius: "50%", bgcolor: tokens.textFaint }} />
                   <Meta>{cigar.origin}</Meta>
                   <Box sx={{ flex: 1 }} />
-                  <Typography sx={{ fontFamily: tokens.serif, fontSize: 17, fontWeight: 600, color: tokens.goldPale }}>
+                  <Typography sx={{ fontFamily: tokens.serif, fontSize: 17, fontWeight: 600, color: tokens.copper }}>
                     {cigar.price}
                   </Typography>
                 </Stack>
@@ -259,10 +259,10 @@ export default function Swipe({ user, liked, setLiked, humidor, setHumidor, setV
                         px: 1.2,
                         py: 0.5,
                         borderRadius: 999,
-                        bgcolor: "rgba(212,175,55,0.08)",
+                        bgcolor: tokens.copperWash,
                         border: `1px solid ${tokens.line}`,
                         fontSize: 11.5,
-                        color: tokens.goldPale,
+                        color: tokens.copper,
                         textTransform: "capitalize",
                       }}
                     >
@@ -280,7 +280,7 @@ export default function Swipe({ user, liked, setLiked, humidor, setHumidor, setV
                     <Stack spacing={0.6}>
                       {reasons.map((r) => (
                         <Stack key={r} direction="row" spacing={1} sx={{ alignItems: "center" }}>
-                          <Box sx={{ width: 4, height: 4, borderRadius: "50%", bgcolor: tokens.gold, flexShrink: 0 }} />
+                          <Box sx={{ width: 4, height: 4, borderRadius: "50%", bgcolor: tokens.copper, flexShrink: 0 }} />
                           <Typography sx={{ fontSize: 12, color: tokens.textMuted }}>
                             {r}
                           </Typography>
@@ -299,12 +299,12 @@ export default function Swipe({ user, liked, setLiked, humidor, setHumidor, setV
                       py: 1.4,
                       borderRadius: 2.5,
                       bgcolor: tokens.surfaceHi,
-                      borderLeft: `2px solid ${tokens.gold}`,
+                      borderLeft: `2px solid ${tokens.copper}`,
                     }}
                   >
                     <Stack direction="row" spacing={0.8} sx={{ alignItems: "center" }}>
-                      <LocalBarIcon sx={{ fontSize: 14, color: tokens.gold }} />
-                      <Typography sx={{ fontSize: 12, fontWeight: 700, color: tokens.goldPale }}>
+                      <LocalBarIcon sx={{ fontSize: 14, color: tokens.copper }} />
+                      <Typography sx={{ fontSize: 12, fontWeight: 700, color: tokens.copper }}>
                         Pair with {pairing.drink}
                       </Typography>
                     </Stack>
@@ -329,7 +329,7 @@ export default function Swipe({ user, liked, setLiked, humidor, setHumidor, setV
             height: 58,
             border: `1px solid ${tokens.lineSoft}`,
             color: tokens.textMuted,
-            "&:hover": { borderColor: "#6B635A", color: tokens.text },
+            "&:hover": { borderColor: tokens.taupe, color: tokens.text },
           }}
         >
           <CloseIcon sx={{ fontSize: 25 }} />
@@ -341,10 +341,10 @@ export default function Swipe({ user, liked, setLiked, humidor, setHumidor, setV
           sx={{
             width: 68,
             height: 68,
-            bgcolor: tokens.gold,
-            color: "#0A0908",
-            boxShadow: "0 8px 26px rgba(212,175,55,0.32)",
-            "&:hover": { bgcolor: tokens.goldLight },
+            bgcolor: tokens.copper,
+            color: tokens.cream,
+            boxShadow: "0 8px 22px rgba(144,72,24,0.3)",
+            "&:hover": { bgcolor: tokens.copperDeep },
           }}
         >
           <FavoriteIcon sx={{ fontSize: 27 }} />
@@ -356,9 +356,9 @@ export default function Swipe({ user, liked, setLiked, humidor, setHumidor, setV
           sx={{
             width: 58,
             height: 58,
-            border: `1px solid ${inHumidor ? tokens.gold : tokens.lineSoft}`,
-            color: inHumidor ? tokens.gold : tokens.textMuted,
-            "&:hover": { borderColor: tokens.gold, color: tokens.gold },
+            border: `1px solid ${inHumidor ? tokens.copper : tokens.lineSoft}`,
+            color: inHumidor ? tokens.copper : tokens.textMuted,
+            "&:hover": { borderColor: tokens.copper, color: tokens.copper },
           }}
         >
           <Inventory2OutlinedIcon sx={{ fontSize: 22 }} />

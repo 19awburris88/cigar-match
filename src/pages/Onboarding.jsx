@@ -67,14 +67,14 @@ function OptionRow({ label, hint, selected, multi, onClick }) {
         py: 1.5,
         borderRadius: 3,
         border: "1px solid",
-        borderColor: selected ? tokens.gold : tokens.line,
-        bgcolor: selected ? "rgba(212,175,55,0.09)" : tokens.surface,
+        borderColor: selected ? tokens.copper : tokens.line,
+        bgcolor: selected ? tokens.copperWash : tokens.surface,
         transition: "border-color .18s, background-color .18s",
-        "&:hover": { borderColor: selected ? tokens.gold : "rgba(212,175,55,0.35)" },
+        "&:hover": { borderColor: selected ? tokens.copper : tokens.copperEdge },
       }}
     >
       <Box sx={{ flex: 1, minWidth: 0 }}>
-        <Typography sx={{ fontSize: 15, fontWeight: 600, color: selected ? tokens.goldPale : tokens.text }}>
+        <Typography sx={{ fontSize: 15, fontWeight: 600, color: selected ? tokens.copper : tokens.text }}>
           {label}
         </Typography>
         {hint && (
@@ -92,14 +92,14 @@ function OptionRow({ label, hint, selected, multi, onClick }) {
           flexShrink: 0,
           borderRadius: multi ? "6px" : "50%",
           border: "1px solid",
-          borderColor: selected ? tokens.gold : "rgba(255,255,255,0.16)",
-          bgcolor: selected ? tokens.gold : "transparent",
+          borderColor: selected ? tokens.copper : tokens.line,
+          bgcolor: selected ? tokens.copper : "transparent",
           display: "grid",
           placeItems: "center",
           transition: "all .18s",
         }}
       >
-        {selected && <CheckIcon sx={{ fontSize: 15, color: "#0A0908" }} />}
+        {selected && <CheckIcon sx={{ fontSize: 15, color: tokens.cream }} />}
       </Box>
     </ButtonBase>
   );
@@ -114,13 +114,13 @@ function TokenChip({ label, selected, onClick }) {
         py: 1,
         borderRadius: 999,
         border: "1px solid",
-        borderColor: selected ? tokens.gold : tokens.line,
-        bgcolor: selected ? tokens.gold : tokens.surface,
-        color: selected ? "#0A0908" : tokens.textMuted,
+        borderColor: selected ? tokens.copper : tokens.line,
+        bgcolor: selected ? tokens.copper : tokens.surface,
+        color: selected ? tokens.cream : tokens.textMuted,
         fontSize: 13,
         fontWeight: selected ? 700 : 500,
         transition: "all .18s",
-        "&:hover": { borderColor: "rgba(212,175,55,0.5)" },
+        "&:hover": { borderColor: tokens.copperEdge },
       }}
     >
       {label}
@@ -138,7 +138,7 @@ function StepHeading({ title, sub, count }) {
       <Typography sx={{ fontSize: 13, color: tokens.textMuted, mt: 0.6, lineHeight: 1.5 }}>
         {sub}
         {count > 0 && (
-          <Typography component="span" sx={{ fontSize: 12.5, fontWeight: 700, color: tokens.gold, ml: 0.8 }}>
+          <Typography component="span" sx={{ fontSize: 12.5, fontWeight: 700, color: tokens.copper, ml: 0.8 }}>
             · {count} selected
           </Typography>
         )}
@@ -330,8 +330,8 @@ export default function Onboarding({ setUser }) {
           px: 4,
           textAlign: "center",
           background:
-            "radial-gradient(520px 340px at 50% 24%, rgba(212,175,55,0.13), transparent 70%), " +
-            "radial-gradient(420px 300px at 50% 96%, rgba(242,102,13,0.09), transparent 70%)",
+            "radial-gradient(520px 340px at 50% 24%, rgba(144,72,24,0.09), transparent 70%), " +
+            "radial-gradient(420px 300px at 50% 96%, rgba(181,106,53,0.1), transparent 70%)",
         }}
       >
         <motion.div
@@ -339,7 +339,7 @@ export default function Onboarding({ setUser }) {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.7, ease: [0.2, 0.7, 0.3, 1] }}
         >
-          <Logo size={31} stacked tagline />
+          <Logo size={38} stacked tagline />
         </motion.div>
 
         <motion.div
@@ -348,7 +348,7 @@ export default function Onboarding({ setUser }) {
           transition={{ duration: 0.6, delay: 0.28 }}
           style={{ width: "100%" }}
         >
-          <Typography variant="h5" sx={{ fontSize: 27, mt: 7, lineHeight: 1.34, color: tokens.text }}
+          <Typography variant="h5" sx={{ fontSize: 27, mt: 5.5, lineHeight: 1.34, color: tokens.text }}
           >
             Find the cigar
             <br />
@@ -389,7 +389,7 @@ export default function Onboarding({ setUser }) {
             border: `1px solid ${tokens.line}`,
             color: tokens.textMuted,
             flexShrink: 0,
-            "&:hover": { borderColor: tokens.gold, color: tokens.gold },
+            "&:hover": { borderColor: tokens.copper, color: tokens.copper },
           }}
         >
           <ArrowBackIcon sx={{ fontSize: 17 }} />
@@ -413,8 +413,8 @@ export default function Onboarding({ setUser }) {
               flex: 1,
               height: 3,
               borderRadius: 3,
-              bgcolor: i <= step ? tokens.gold : "rgba(255,255,255,0.09)",
-              boxShadow: i === step ? "0 0 10px rgba(212,175,55,0.55)" : "none",
+              bgcolor: i <= step ? tokens.copper : tokens.line,
+              boxShadow: i === step ? "0 1px 5px rgba(144,72,24,0.4)" : "none",
               transition: "background-color .3s, box-shadow .3s",
             }}
           />
@@ -448,7 +448,7 @@ export default function Onboarding({ setUser }) {
             py: 1.8,
             borderRadius: 3,
             fontSize: 15,
-            "&.Mui-disabled": { bgcolor: "rgba(255,255,255,0.06)", color: tokens.textFaint },
+            "&.Mui-disabled": { bgcolor: tokens.lineSoft, color: tokens.textFaint },
           }}
         >
           {isLast ? "Start discovering" : "Continue"}
@@ -458,7 +458,7 @@ export default function Onboarding({ setUser }) {
           <Button
             fullWidth
             onClick={() => (isLast ? setUser(form) : setStep((s) => s + 1))}
-            sx={{ color: tokens.textFaint, fontSize: 13, "&:hover": { color: tokens.gold, bgcolor: "transparent" } }}
+            sx={{ color: tokens.textFaint, fontSize: 13, "&:hover": { color: tokens.copper, bgcolor: "transparent" } }}
           >
             Skip this step
           </Button>

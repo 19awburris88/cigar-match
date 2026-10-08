@@ -28,7 +28,7 @@ export default function BottomNav({ view, setView, humidorCount = 0 }) {
         height: 72,
         display: "flex",
         alignItems: "stretch",
-        bgcolor: "rgba(10,9,8,0.88)",
+        bgcolor: "rgba(250,246,239,0.92)",
         backdropFilter: "blur(18px)",
         borderTop: `1px solid ${tokens.line}`,
       }}
@@ -48,9 +48,9 @@ export default function BottomNav({ view, setView, humidorCount = 0 }) {
               flexDirection: "column",
               gap: 0.5,
               position: "relative",
-              color: active ? tokens.gold : tokens.textFaint,
+              color: active ? tokens.copper : tokens.textFaint,
               transition: "color .2s",
-              "&:hover": { color: active ? tokens.gold : tokens.textMuted },
+              "&:hover": { color: active ? tokens.copper : tokens.textMuted },
             }}
           >
             {active && (
@@ -61,8 +61,8 @@ export default function BottomNav({ view, setView, humidorCount = 0 }) {
                   width: 26,
                   height: 2,
                   borderRadius: "0 0 3px 3px",
-                  bgcolor: tokens.gold,
-                  boxShadow: "0 0 12px rgba(212,175,55,0.7)",
+                  bgcolor: tokens.copper,
+                  boxShadow: "0 1px 6px rgba(144,72,24,0.45)",
                 }}
               />
             )}
@@ -79,8 +79,8 @@ export default function BottomNav({ view, setView, humidorCount = 0 }) {
                     height: 15,
                     px: 0.4,
                     borderRadius: 999,
-                    bgcolor: tokens.gold,
-                    color: "#0A0908",
+                    bgcolor: tokens.copper,
+                    color: tokens.cream,
                     fontSize: 9,
                     fontWeight: 700,
                     display: "grid",

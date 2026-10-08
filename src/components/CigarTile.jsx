@@ -27,7 +27,7 @@ export default function CigarTile({ cigar, action, onAction }) {
           sx={{
             position: "absolute",
             inset: 0,
-            background: "linear-gradient(180deg, rgba(10,9,8,0.1) 40%, rgba(20,18,16,0.9) 100%)",
+            background: "linear-gradient(180deg, rgba(19,18,16,0.34) 0%, rgba(19,18,16,0) 58%)",
           }}
         />
         {cigar.rating && (
@@ -39,11 +39,11 @@ export default function CigarTile({ cigar, action, onAction }) {
               px: 0.8,
               py: 0.1,
               borderRadius: 1,
-              bgcolor: "rgba(10,9,8,0.7)",
-              border: `1px solid ${tokens.line}`,
+              bgcolor: tokens.scrim,
+              border: `1px solid rgba(250,246,239,0.18)`,
               fontSize: 10,
               fontWeight: 700,
-              color: tokens.goldPale,
+              color: tokens.onImage,
             }}
           >
             {cigar.rating}
@@ -52,7 +52,7 @@ export default function CigarTile({ cigar, action, onAction }) {
       </Box>
 
       <Box sx={{ px: 1.4, py: 1.2, flex: 1, display: "flex", flexDirection: "column" }}>
-        <Typography noWrap sx={{ fontSize: 9, fontWeight: 700, letterSpacing: 1.2, color: tokens.gold }}>
+        <Typography noWrap sx={{ fontSize: 9, fontWeight: 700, letterSpacing: 1.2, color: tokens.copper }}>
           {cigar.brand.toUpperCase()}
         </Typography>
         <Typography sx={{ fontSize: 12.5, fontWeight: 600, mt: 0.3, lineHeight: 1.3, minHeight: 32 }}>
@@ -73,7 +73,7 @@ export default function CigarTile({ cigar, action, onAction }) {
                 alignSelf: "flex-start",
                 fontSize: 10.5,
                 color: tokens.textFaint,
-                "&:hover": { color: tokens.gold },
+                "&:hover": { color: tokens.copper },
               }}
             >
               {action}

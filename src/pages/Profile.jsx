@@ -11,10 +11,10 @@ import CigarTile from "../components/CigarTile";
 import { tokens } from "../theme";
 
 const EXPERIENCE_COLOR = {
-  Beginner: "#7BAE7F",
-  Intermediate: "#D9A441",
-  Advanced: "#D2703A",
-  Aficionado: tokens.gold,
+  Beginner: "#4F7A53",
+  Intermediate: "#8A6A1F",
+  Advanced: "#A85427",
+  Aficionado: "#5E2F12",
 };
 
 function StatBar({ label, percent }) {
@@ -24,17 +24,17 @@ function StatBar({ label, percent }) {
         <Typography sx={{ fontSize: 12.5, color: tokens.text }}>
           {label}
         </Typography>
-        <Typography sx={{ fontSize: 11.5, fontWeight: 600, color: tokens.gold }}>
+        <Typography sx={{ fontSize: 11.5, fontWeight: 600, color: tokens.copper }}>
           {percent}%
         </Typography>
       </Stack>
-      <Box sx={{ height: 4, borderRadius: 4, bgcolor: "rgba(255,255,255,0.07)", overflow: "hidden" }}>
+      <Box sx={{ height: 4, borderRadius: 4, bgcolor: tokens.lineSoft, overflow: "hidden" }}>
         <Box
           sx={{
             width: `${percent}%`,
             height: "100%",
             borderRadius: 4,
-            background: `linear-gradient(90deg, #8E6F1C, ${tokens.gold})`,
+            background: `linear-gradient(90deg, ${tokens.copperSoft}, ${tokens.copper})`,
             transition: "width .6s ease",
           }}
         />
@@ -73,7 +73,7 @@ function Suggestion({ cigar, reason, inHumidor, onAdd }) {
       />
 
       <Box sx={{ flex: 1, minWidth: 0 }}>
-        <Typography sx={{ fontSize: 9, fontWeight: 700, letterSpacing: 1.2, color: tokens.gold }} noWrap>
+        <Typography sx={{ fontSize: 9, fontWeight: 700, letterSpacing: 1.2, color: tokens.copper }} noWrap>
           {cigar.brand.toUpperCase()}
         </Typography>
         <Typography sx={{ fontSize: 13, fontWeight: 600, mt: 0.2 }} noWrap>
@@ -93,10 +93,10 @@ function Suggestion({ cigar, reason, inHumidor, onAdd }) {
           height: 34,
           borderRadius: "50%",
           flexShrink: 0,
-          border: `1px solid ${inHumidor ? tokens.gold : tokens.line}`,
-          bgcolor: inHumidor ? tokens.gold : "transparent",
-          color: inHumidor ? "#0A0908" : tokens.textMuted,
-          "&:hover": { borderColor: tokens.gold, color: inHumidor ? "#0A0908" : tokens.gold },
+          border: `1px solid ${inHumidor ? tokens.copper : tokens.line}`,
+          bgcolor: inHumidor ? tokens.copper : "transparent",
+          color: inHumidor ? tokens.cream : tokens.textMuted,
+          "&:hover": { borderColor: tokens.copper, color: inHumidor ? tokens.cream : tokens.copper },
         }}
       >
         {inHumidor ? <CheckIcon sx={{ fontSize: 16 }} /> : <Inventory2OutlinedIcon sx={{ fontSize: 16 }} />}
@@ -150,8 +150,8 @@ export default function Profile({ user, liked, humidor = [], setHumidor, setView
               sx={{
                 flexShrink: 0,
                 bgcolor: "transparent",
-                color: EXPERIENCE_COLOR[user.experience] || tokens.gold,
-                border: `1px solid ${EXPERIENCE_COLOR[user.experience] || tokens.gold}`,
+                color: EXPERIENCE_COLOR[user.experience] || tokens.copper,
+                border: `1px solid ${EXPERIENCE_COLOR[user.experience] || tokens.copper}`,
                 fontWeight: 700,
                 fontSize: 10.5,
                 letterSpacing: 0.4,
@@ -164,7 +164,7 @@ export default function Profile({ user, liked, humidor = [], setHumidor, setView
         <Stack direction="row" spacing={3} sx={{ mt: 2.5 }}>
           {stats.map((s) => (
             <Box key={s.label}>
-              <Typography sx={{ fontFamily: tokens.serif, fontSize: 24, fontWeight: 600, color: tokens.goldPale, lineHeight: 1 }}>
+              <Typography sx={{ fontFamily: tokens.serif, fontSize: 24, fontWeight: 600, color: tokens.copper, lineHeight: 1 }}>
                 {s.value}
               </Typography>
               <Typography sx={{ fontSize: 9.5, letterSpacing: 1.2, color: tokens.textFaint, mt: 0.5 }}>
@@ -232,9 +232,9 @@ export default function Profile({ user, liked, humidor = [], setHumidor, setView
                 py: 1.2,
                 borderRadius: 2.5,
                 border: `1px solid ${tokens.line}`,
-                color: tokens.gold,
+                color: tokens.copper,
                 fontSize: 13,
-                "&:hover": { borderColor: tokens.gold, bgcolor: "rgba(212,175,55,0.06)" },
+                "&:hover": { borderColor: tokens.copper, bgcolor: tokens.copperWash },
               }}
             >
               Keep discovering
@@ -245,7 +245,7 @@ export default function Profile({ user, liked, humidor = [], setHumidor, setView
         {profile ? (
           <Panel>
             <Stack direction="row" sx={{ mb: 2, justifyContent: "space-between", alignItems: "baseline" }}>
-              <Typography variant="h6" sx={{ fontSize: 17, color: tokens.goldPale }}>
+              <Typography variant="h6" sx={{ fontSize: 17, color: tokens.copper }}>
                 Taste Profile
               </Typography>
               <Typography sx={{ fontSize: 11, color: tokens.textFaint }}>
@@ -272,10 +272,10 @@ export default function Profile({ user, liked, humidor = [], setHumidor, setView
                     px: 1.2,
                     py: 0.5,
                     borderRadius: 999,
-                    bgcolor: "rgba(212,175,55,0.08)",
+                    bgcolor: tokens.copperWash,
                     border: `1px solid ${tokens.line}`,
                     fontSize: 11.5,
-                    color: tokens.goldPale,
+                    color: tokens.copper,
                     textTransform: "capitalize",
                   }}
                 >

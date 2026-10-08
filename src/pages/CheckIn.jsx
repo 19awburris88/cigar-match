@@ -98,7 +98,7 @@ export default function CheckIn({ user, checkins, setCheckins, setView }) {
       key={metro}
       sx={{
         bgcolor: tokens.surfaceHi,
-        color: tokens.gold,
+        color: tokens.copper,
         fontSize: 10,
         fontWeight: 700,
         letterSpacing: 1.4,
@@ -132,7 +132,7 @@ export default function CheckIn({ user, checkins, setCheckins, setView }) {
             height: 34,
             border: `1px solid ${tokens.line}`,
             color: tokens.textMuted,
-            "&:hover": { borderColor: tokens.gold, color: tokens.gold },
+            "&:hover": { borderColor: tokens.copper, color: tokens.copper },
           }}
         >
           <ArrowBackIcon sx={{ fontSize: 17 }} />
@@ -145,7 +145,7 @@ export default function CheckIn({ user, checkins, setCheckins, setView }) {
       <Box sx={{ flex: 1, overflowY: "auto", px: 2.5, pt: 2.5, pb: 4 }}>
         {!posted ? (
           <Box sx={{ p: 2.2, borderRadius: "18px", bgcolor: tokens.surface, border: `1px solid ${tokens.line}`, mb: 3 }}>
-            <Typography variant="h6" sx={{ fontSize: 16, color: tokens.goldPale, mb: 0.4 }}>
+            <Typography variant="h6" sx={{ fontSize: 16, color: tokens.copper, mb: 0.4 }}>
               Where are you smoking?
             </Typography>
             <Typography sx={{ fontSize: 12, color: tokens.textFaint, mb: 2 }}>
@@ -197,7 +197,7 @@ export default function CheckIn({ user, checkins, setCheckins, setView }) {
                   py: 1.7,
                   borderRadius: 3,
                   fontSize: 15,
-                  "&.Mui-disabled": { bgcolor: "rgba(255,255,255,0.06)", color: tokens.textFaint },
+                  "&.Mui-disabled": { bgcolor: tokens.lineSoft, color: tokens.textFaint },
                 }}
               >
                 Post check-in
@@ -216,14 +216,14 @@ export default function CheckIn({ user, checkins, setCheckins, setView }) {
                 border: `1px solid ${tokens.line}`,
               }}
             >
-              <CheckCircleIcon sx={{ fontSize: 44, color: tokens.gold, mb: 1.2 }} />
+              <CheckCircleIcon sx={{ fontSize: 44, color: tokens.copper, mb: 1.2 }} />
               <Typography variant="h6" sx={{ fontSize: 19 }}>
                 You're checked in
               </Typography>
               <Typography sx={{ color: tokens.textMuted, fontSize: 13, mt: 0.6 }}>
                 Your session is on the feed
               </Typography>
-              <Button onClick={reset} sx={{ mt: 2, color: tokens.gold, fontSize: 13 }}>
+              <Button onClick={reset} sx={{ mt: 2, color: tokens.copper, fontSize: 13 }}>
                 Check in again
               </Button>
             </Box>
@@ -248,8 +248,8 @@ export default function CheckIn({ user, checkins, setCheckins, setView }) {
                   height: 36,
                   fontSize: 12,
                   fontWeight: 700,
-                  bgcolor: "rgba(212,175,55,0.12)",
-                  color: tokens.gold,
+                  bgcolor: tokens.copperWash,
+                  color: tokens.copper,
                   border: `1px solid ${tokens.line}`,
                 }}
               >
@@ -265,7 +265,7 @@ export default function CheckIn({ user, checkins, setCheckins, setView }) {
                     {ci.time}
                   </Typography>
                 </Stack>
-                <Typography sx={{ fontSize: 12.5, color: tokens.goldPale, mt: 0.3 }}>
+                <Typography sx={{ fontSize: 12.5, color: tokens.copper, mt: 0.3 }}>
                   {ci.cigar}
                 </Typography>
                 <Typography sx={{ fontSize: 11.5, color: tokens.textFaint }}>

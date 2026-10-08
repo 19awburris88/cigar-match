@@ -17,12 +17,12 @@ function Rating({ value, size = "sm" }) {
     <Stack direction="row" spacing={0.4} sx={{ alignItems: "center", px: big ? 1.3 : 1,
         py: big ? 0.6 : 0.4,
         borderRadius: 1.8,
-        bgcolor: "rgba(10,9,8,0.68)",
+        bgcolor: tokens.scrim,
         backdropFilter: "blur(6px)",
-        border: `1px solid ${tokens.line}` }}
+        border: `1px solid rgba(250,246,239,0.18)` }}
     >
-      <StarIcon sx={{ fontSize: big ? 15 : 12.5, color: tokens.gold }} />
-      <Typography sx={{ fontSize: big ? 13 : 11.5, fontWeight: 700, color: tokens.goldPale }}>
+      <StarIcon sx={{ fontSize: big ? 15 : 12.5, color: tokens.onImageAccent }} />
+      <Typography sx={{ fontSize: big ? 13 : 11.5, fontWeight: 700, color: tokens.onImage }}>
         {value}
       </Typography>
     </Stack>
@@ -37,9 +37,9 @@ function Tag({ label, strong }) {
         py: 0.5,
         borderRadius: 999,
         border: `1px solid ${tokens.line}`,
-        bgcolor: strong ? "rgba(212,175,55,0.08)" : "transparent",
+        bgcolor: strong ? tokens.copperWash : "transparent",
         fontSize: 11,
-        color: strong ? tokens.goldPale : tokens.textMuted,
+        color: strong ? tokens.copper : tokens.textMuted,
       }}
     >
       {label}
@@ -94,11 +94,11 @@ export default function Lounges({ setView }) {
                 fontSize: 12.5,
                 fontWeight: active ? 700 : 500,
                 border: "1px solid",
-                borderColor: active ? tokens.gold : tokens.line,
-                bgcolor: active ? tokens.gold : "transparent",
-                color: active ? "#0A0908" : tokens.textMuted,
+                borderColor: active ? tokens.copper : tokens.line,
+                bgcolor: active ? tokens.copper : "transparent",
+                color: active ? tokens.cream : tokens.textMuted,
                 transition: "all .18s",
-                "&:hover": { borderColor: "rgba(212,175,55,0.5)" },
+                "&:hover": { borderColor: tokens.copperEdge },
               }}
             >
               {m}
@@ -128,7 +128,7 @@ export default function Lounges({ setView }) {
                   border: `1px solid ${tokens.line}`,
                   bgcolor: tokens.surface,
                   transition: "border-color .2s, transform .2s",
-                  "&:hover": { borderColor: "rgba(212,175,55,0.35)", transform: "translateY(-2px)" },
+                  "&:hover": { borderColor: tokens.copperEdge, transform: "translateY(-2px)" },
                 }}
               >
                 <Box sx={{ position: "relative" }}>
@@ -144,17 +144,17 @@ export default function Lounges({ setView }) {
                       position: "absolute",
                       inset: 0,
                       background:
-                        "linear-gradient(180deg, rgba(10,9,8,0.35) 0%, rgba(10,9,8,0.05) 30%, rgba(12,11,10,0.78) 68%, rgba(12,11,10,0.97) 100%)",
+                        "linear-gradient(180deg, rgba(19,18,16,0.3) 0%, rgba(19,18,16,0.04) 30%, rgba(19,18,16,0.72) 68%, rgba(19,18,16,0.93) 100%)",
                     }}
                   />
                   <Box sx={{ position: "absolute", top: 10, right: 10 }}>
                     <Rating value={lounge.rating} />
                   </Box>
                   <Box sx={{ position: "absolute", left: 16, right: 16, bottom: 10 }}>
-                    <Typography variant="h6" sx={{ fontSize: 18, lineHeight: 1.2 }}>
+                    <Typography variant="h6" sx={{ fontSize: 18, lineHeight: 1.2, color: tokens.onImage }}>
                       {lounge.name}
                     </Typography>
-                    <Typography sx={{ fontSize: 11.5, color: tokens.textMuted, mt: 0.3 }}>
+                    <Typography sx={{ fontSize: 11.5, color: tokens.onImageMuted, mt: 0.3 }}>
                       {lounge.city}, {lounge.state} · {lounge.reviews} reviews
                     </Typography>
                   </Box>
@@ -195,7 +195,7 @@ function LoungeDetail({ lounge, onBack, setView }) {
             position: "absolute",
             inset: 0,
             background:
-              "linear-gradient(180deg, rgba(10,9,8,0.6) 0%, rgba(10,9,8,0.12) 32%, rgba(10,9,8,0.8) 70%, rgba(10,9,8,0.99) 100%)",
+              "linear-gradient(180deg, rgba(19,18,16,0.55) 0%, rgba(19,18,16,0.1) 32%, rgba(19,18,16,0.76) 70%, rgba(19,18,16,0.95) 100%)",
           }}
         />
         <IconButton
@@ -207,11 +207,11 @@ function LoungeDetail({ lounge, onBack, setView }) {
             left: 14,
             width: 36,
             height: 36,
-            bgcolor: "rgba(10,9,8,0.62)",
+            bgcolor: tokens.scrim,
             backdropFilter: "blur(6px)",
-            border: `1px solid ${tokens.line}`,
-            color: "#fff",
-            "&:hover": { bgcolor: "rgba(10,9,8,0.85)" },
+            border: `1px solid rgba(250,246,239,0.18)`,
+            color: tokens.onImage,
+            "&:hover": { bgcolor: "rgba(19,18,16,0.82)" },
           }}
         >
           <ArrowBackIcon sx={{ fontSize: 18 }} />
@@ -221,10 +221,10 @@ function LoungeDetail({ lounge, onBack, setView }) {
         </Box>
 
         <Box sx={{ position: "absolute", left: 20, right: 20, bottom: 14 }}>
-          <Typography sx={{ fontSize: 10, fontWeight: 700, letterSpacing: 1.8, color: tokens.gold, mb: 0.5 }}>
+          <Typography sx={{ fontSize: 10, fontWeight: 700, letterSpacing: 1.8, color: tokens.onImageAccent, mb: 0.5 }}>
             {lounge.city.toUpperCase()}, {lounge.state}
           </Typography>
-          <Typography variant="h5" sx={{ fontSize: 24, lineHeight: 1.18 }}>
+          <Typography variant="h5" sx={{ fontSize: 24, lineHeight: 1.18, color: tokens.onImage }}>
             {lounge.name}
           </Typography>
         </Box>
@@ -239,7 +239,7 @@ function LoungeDetail({ lounge, onBack, setView }) {
             [PhoneIcon, lounge.phone],
           ].map(([Icon, text]) => (
             <Stack key={text} direction="row" spacing={1.5} sx={{ alignItems: "flex-start" }}>
-              <Icon sx={{ fontSize: 16, color: tokens.gold, mt: "1px", flexShrink: 0 }} />
+              <Icon sx={{ fontSize: 16, color: tokens.copper, mt: "1px", flexShrink: 0 }} />
               <Typography sx={{ fontSize: 12.5, color: tokens.textMuted, lineHeight: 1.55 }}>
                 {text}
               </Typography>
@@ -259,7 +259,7 @@ function LoungeDetail({ lounge, onBack, setView }) {
         {lounge.events.length > 0 && (
           <>
             <Stack direction="row" spacing={0.9} sx={{ mb: 1.2, alignItems: "center" }}>
-              <EventIcon sx={{ fontSize: 14, color: tokens.gold }} />
+              <EventIcon sx={{ fontSize: 14, color: tokens.copper }} />
               <Typography sx={{ fontSize: 9.5, fontWeight: 700, letterSpacing: 1.6, color: tokens.textFaint }}>
                 WHAT'S ON
               </Typography>
@@ -273,7 +273,7 @@ function LoungeDetail({ lounge, onBack, setView }) {
                     py: 1.2,
                     borderRadius: 2.5,
                     bgcolor: tokens.surfaceHi,
-                    borderLeft: `2px solid ${tokens.gold}`,
+                    borderLeft: `2px solid ${tokens.copper}`,
                   }}
                 >
                   <Typography sx={{ fontSize: 12.5, color: tokens.text }}>
@@ -308,7 +308,7 @@ function LoungeDetail({ lounge, onBack, setView }) {
                   {c.wrapper} · {c.strength}
                 </Typography>
               </Box>
-              <Typography sx={{ fontFamily: tokens.serif, fontSize: 14, color: tokens.goldPale }}>
+              <Typography sx={{ fontFamily: tokens.serif, fontSize: 14, color: tokens.copper }}>
                 {c.price}
               </Typography>
             </Stack>

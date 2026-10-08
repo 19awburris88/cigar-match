@@ -1,8 +1,8 @@
-# Cigar Match
+# Humidor Connect
 
-**Swipe. Discover. Connect. Smoke Better.**
+**Discover cigars you’ll love, where you are.**
 
-Cigar Match is a mobile-first social discovery platform for cigar enthusiasts. Think Tinder meets Yelp for cigar culture — personalized recommendations, lounge discovery, digital humidor tracking, and a community check-in system, all in one app.
+Humidor Connect is a mobile-first discovery platform for cigar enthusiasts. It connects someone’s taste to the selection around them — personalized recommendations filtered to what the lounge actually carries, lounge discovery, digital humidor tracking, and a community check-in system, all in one app.
 
 ---
 
@@ -75,9 +75,10 @@ src/
 ├── components/
 │   ├── BottomNav.jsx   # 4-tab navigation bar
 │   ├── CigarTile.jsx   # Shared grid tile (Humidor + Profile)
-│   └── Logo.jsx        # SVG mark and wordmark lockup
+│   ├── Logo.jsx        # Brand lockup: monogram, wordmark, tagline
+│   └── logoPaths.js    # Traced outlines of the master artwork
 ├── data/
-│   ├── cigars.js       # 15 cigars with full metadata
+│   ├── cigars.js       # 43 cigars — 15 core houses plus the boutique shelf
 │   └── lounges.js      # 21 lounges across 4 metros
 ├── pages/
 │   ├── Onboarding.jsx  # Splash + 7-step profile setup
@@ -97,8 +98,24 @@ src/
 
 ## Data & assets
 
-The logo is inline SVG (`src/components/Logo.jsx`), so it stays sharp at every
-size and doubles as the favicon.
+## Brand
+
+| Token | Hex | Used for |
+| --- | --- | --- |
+| Tobacco Copper | `#904818` | Primary buttons, links, icons, selected states |
+| Deep Charcoal | `#131210` | Headings, navigation, footer |
+| Warm Cream | `#FAF6EF` | Main background, text on dark surfaces |
+| Warm Graphite | `#38332D` | Body text and descriptions |
+| Muted Taupe | `#6A5E51` | Secondary text, captions, supporting labels |
+
+These live in `src/theme.js` as `tokens`. Cream is the ground, charcoal gives
+structure, copper carries emphasis. The one place the app still goes dark is
+type sitting on photography — the `onImage*` and `scrim` tokens cover that.
+
+The logo is inline SVG. `logoPaths.js` holds the monogram and wordmark traced
+from the master artwork as outlines, so the lockup is resolution-independent and
+carries no font dependency; regenerate it from the source art rather than
+editing the path data by hand.
 
 Cigar and lounge photography is hand-picked, hotlinked Unsplash — one distinct
 frame per cigar and per lounge. They are editorial photographs that set the mood

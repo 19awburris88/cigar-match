@@ -30,7 +30,7 @@ export default function Humidor({ humidor, setHumidor, setView }) {
             mb: 2.5,
           }}
         >
-          <Inventory2OutlinedIcon sx={{ fontSize: 28, color: tokens.gold }} />
+          <Inventory2OutlinedIcon sx={{ fontSize: 28, color: tokens.copper }} />
         </Box>
         <Typography variant="h5" sx={{ fontSize: 23 }}>
           Your humidor is empty

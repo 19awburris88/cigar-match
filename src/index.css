@@ -13,22 +13,22 @@ body,
 
 body {
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background-color: #050505;
-  color: #f5f1e8;
+  background-color: #131210;
+  color: #faf6ef;
   -webkit-font-smoothing: antialiased;
   overscroll-behavior: none;
 }
 
-/* Warm vignette behind the phone frame so the app doesn't float on flat black */
+/* Charcoal ground with a copper warmth, so the cream phone frame lifts off it */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
   z-index: -1;
   background:
-    radial-gradient(900px 520px at 50% -10%, rgba(212, 175, 55, 0.07), transparent 65%),
-    radial-gradient(700px 480px at 50% 110%, rgba(242, 102, 13, 0.05), transparent 60%),
-    #050505;
+    radial-gradient(900px 520px at 50% -10%, rgba(144, 72, 24, 0.22), transparent 65%),
+    radial-gradient(700px 480px at 50% 110%, rgba(181, 106, 53, 0.12), transparent 60%),
+    #131210;
 }
 
 ::-webkit-scrollbar {
@@ -40,16 +40,16 @@ body::before {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(212, 175, 55, 0.28);
+  background: rgba(144, 72, 24, 0.3);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(212, 175, 55, 0.5);
+  background: rgba(144, 72, 24, 0.55);
 }
 
 ::selection {
-  background: rgba(212, 175, 55, 0.28);
+  background: rgba(144, 72, 24, 0.22);
 }
 
 img {

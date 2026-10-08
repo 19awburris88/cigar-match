@@ -34,7 +34,7 @@ function Shell({ children }) {
           color: tokens.text,
           borderRadius: { xs: 0, sm: "28px" },
           border: { xs: "none", sm: `1px solid ${tokens.line}` },
-          boxShadow: { xs: "none", sm: "0 30px 90px rgba(0,0,0,0.7)" },
+          boxShadow: { xs: "none", sm: "0 24px 70px rgba(19,18,16,0.22)" },
         }}
       >
         {children}
