@@ -9,6 +9,7 @@ import Humidor from "./pages/Humidor";
 import AgeGate from "./pages/AgeGate";
 import BottomNav from "./components/BottomNav";
 import DebugPanel from "./components/DebugPanel";
+import InstallPrompt from "./components/InstallPrompt";
 import cigars from "./data/cigars";
 import { usePersistentState } from "./utils/storage";
 import { track, deviceId } from "./utils/events";
@@ -16,7 +17,16 @@ import { tokens } from "./theme";
 
 const MAIN_VIEWS = ["swipe", "lounges", "humidor", "profile"];
 
-/** Phone-shaped frame the whole app lives inside. */
+/**
+ * Phone-shaped frame the whole app lives inside.
+ *
+ * Installed to a home screen the app runs standalone with `viewport-fit=cover`,
+ * so it fills the physical screen — under the notch and under the home
+ * indicator. The safe-area padding is applied to the frame itself rather than
+ * to each page: the bottom nav is absolutely positioned against the frame's
+ * padding box, so it lifts clear of the home indicator for free. In a browser
+ * tab the insets resolve to zero and nothing moves.
+ */
 function Shell({ children }) {
   return (
     <Box
@@ -37,6 +47,10 @@ function Shell({ children }) {
           height: { xs: "100%", sm: "min(920px, 100%)" },
           bgcolor: tokens.bg,
           color: tokens.text,
+          pt: { xs: "env(safe-area-inset-top, 0px)", sm: 0 },
+          pb: { xs: "env(safe-area-inset-bottom, 0px)", sm: 0 },
+          pl: { xs: "env(safe-area-inset-left, 0px)", sm: 0 },
+          pr: { xs: "env(safe-area-inset-right, 0px)", sm: 0 },
           borderRadius: { xs: 0, sm: "28px" },
           border: { xs: "none", sm: `1px solid ${tokens.line}` },
           boxShadow: { xs: "none", sm: "0 24px 70px rgba(19,18,16,0.22)" },
@@ -172,6 +186,7 @@ function App() {
       {MAIN_VIEWS.includes(view) ? (
         <>
           <Box sx={{ height: "calc(100% - 72px)", overflow: "hidden" }}>{pages[view]}</Box>
+          <InstallPrompt />
           <BottomNav view={view} setView={changeView} humidorCount={humidor.length} />
         </>
       ) : (

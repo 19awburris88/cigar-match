@@ -19,6 +19,11 @@ A date-of-birth check stands in front of everything, onboarding included. A pass
 is remembered per device so it is asked once rather than daily; a refusal is
 deliberately *not* stored, so a mistyped year doesn't lock someone out for good.
 
+### Install to the home screen
+It is a progressive web app, so it installs to a phone's home screen, opens full
+screen with no browser chrome, and keeps working with no signal. The two
+platforms get there very differently — see [below](#install-to-the-home-screen-1).
+
 ### Swipe engine
 Swipe through cigars like a dating app. Every like and pass teaches the ranking
 engine your preferences. Right to like, left to pass, or drag the card directly.
@@ -64,6 +69,7 @@ breakdowns as percentage bars, top flavor notes, and your liked collection.
 | Animations | Framer Motion 12 |
 | Icons | MUI Icons Material |
 | State | React state, written through to `localStorage` |
+| Offline / install | vite-plugin-pwa (Workbox) |
 | Hosting | Netlify, auto-deployed from `main` |
 | Type | Cormorant Garamond (display) + Inter (UI) |
 
@@ -90,6 +96,7 @@ src/
 │   ├── BottomNav.jsx   # 4-tab navigation bar
 │   ├── CigarTile.jsx   # Shared grid tile (Humidor + Profile)
 │   ├── DebugPanel.jsx  # Operator-only session export (#debug)
+│   ├── InstallPrompt.jsx  # Add-to-home-screen nudge
 │   ├── Logo.jsx        # Brand lockup: monogram, wordmark, tagline
 │   └── logoPaths.js    # Traced outlines of the master artwork
 ├── data/
@@ -110,6 +117,7 @@ src/
     ├── analytics.js    # Taste profile aggregation (what someone likes)
     ├── events.js       # Field-test event log (what someone did)
     ├── storage.js      # Safe localStorage + usePersistentState
+    ├── install.js      # beforeinstallprompt capture + platform detection
     └── age.js          # Age arithmetic for the gate
 ```
 
@@ -154,6 +162,48 @@ Nothing leaves the device. To pull a session off a test phone, open **`#debug`**
 — an operator-only panel with a summary, JSON download, clipboard copy, and a
 "reset device for the next tester" wipe. Nothing in the UI links to it, so a
 tester poking around will not land there.
+
+---
+
+## Install to the home screen
+
+The app is a PWA. `vite-plugin-pwa` generates the manifest and a Workbox service
+worker at build time, and `registerType: "autoUpdate"` means a new deploy is
+picked up silently instead of asking a tester to refresh.
+
+**The two platforms do not work the same way, and that drives the UI.** Android
+and Chrome fire `beforeinstallprompt`, which `src/utils/install.js` captures the
+moment it fires — it fires once, early, usually before React has mounted, and
+stashing it is the only way to open the native sheet later. **iOS Safari has no
+equivalent API at all**, so there the only route is Share → Add to Home Screen,
+and `InstallPrompt` shows those instructions rather than a button that cannot
+work. The nudge appears only once someone has a profile, and a dismissal sticks.
+
+iOS also reads several things from `<meta>` tags rather than the manifest, so
+`index.html` carries `apple-mobile-web-app-capable`, `apple-mobile-web-app-title`,
+a status-bar style and a 180px `apple-touch-icon`. Those have to agree with the
+manifest.
+
+### Safe areas
+
+Installed, the app runs standalone under `viewport-fit=cover` — it fills the
+physical screen, including under the notch and under the home indicator. The
+`env(safe-area-inset-*)` padding goes on the phone frame in `App.jsx` rather than
+on each page, so the absolutely-positioned bottom nav lifts clear of the home
+indicator for free. In a browser tab the insets resolve to zero and nothing moves.
+
+### Offline
+
+The app shell is precached. Photography is hotlinked Unsplash and the fonts are
+remote, so both get runtime caches — without them an installed app on weak lounge
+wifi would show neither. Verified with the network cut: a reload still boots.
+
+### Icons
+
+`public/icon-*.png` are generated from the monogram in `logoPaths.js` — cream on
+copper, which reads far better at home-screen size than a cream ground would. The
+maskable variant keeps the mark inside the inner 80% safe zone because Android
+crops it to its own shape. Regenerate from the traced path rather than redrawing.
 
 ---
 
@@ -203,6 +253,7 @@ is presented as authoritative:
 - [x] Age gate
 - [x] Session persistence (localStorage)
 - [x] Field-test event capture + export
+- [x] Installable to a phone home screen, works offline
 - [ ] Real inventory and pricing for the pilot lounge
 - [ ] Attribute a discovery to an actual purchase — the only number a lounge cares about
 - [ ] Backend + user authentication

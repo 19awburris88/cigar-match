@@ -1,0 +1,3 @@
+# Single-page app: hand every unmatched path to index.html rather than a 404.
+# Netlify serves real files (manifest, sw.js, icons, assets) before redirects.
+/*  /index.html  200
