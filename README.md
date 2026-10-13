@@ -118,6 +118,7 @@ src/
     ├── events.js       # Field-test event log (what someone did)
     ├── storage.js      # Safe localStorage + usePersistentState
     ├── install.js      # beforeinstallprompt capture + platform detection
+    ├── installDiagnostics.js  # Why install is or isn't offered, on-device
     └── age.js          # Age arithmetic for the gate
 ```
 
@@ -158,6 +159,13 @@ and removes, tab changes, metro filter, lounge opens, check-ins.
 The onboarding step events are the ones to watch: the last step recorded for a
 device that never completed is exactly where that person gave up.
 
+It also reports **install readiness** — secure origin, service worker state,
+whether the SW is controlling the page, and the manifest's status and MIME type.
+Chrome decides installability silently (the menu just says the app cannot be
+installed, with no reason), so when a tester's phone refuses, this reads the
+answer off the device instead of guessing. A freshly deployed site commonly
+reports not-installable for one load, until the service worker activates.
+
 Nothing leaves the device. To pull a session off a test phone, open **`#debug`**
 — an operator-only panel with a summary, JSON download, clipboard copy, and a
 "reset device for the next tester" wipe. Nothing in the UI links to it, so a
@@ -197,6 +205,11 @@ indicator for free. In a browser tab the insets resolve to zero and nothing move
 The app shell is precached. Photography is hotlinked Unsplash and the fonts are
 remote, so both get runtime caches — without them an installed app on weak lounge
 wifi would show neither. Verified with the network cut: a reload still boots.
+
+`netlify.toml` corrects the manifest's `Content-Type` — Netlify guesses
+`application/octet-stream` for `.webmanifest`, where the spec type is
+`application/manifest+json` — and pins `sw.js` to no-cache so a deploy can always
+reach a device that already holds the old worker.
 
 ### Icons
 

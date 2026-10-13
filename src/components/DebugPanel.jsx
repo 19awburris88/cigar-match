@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Box, Typography, Button, Stack, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { exportPayload, summarize, clearEvents, deviceId } from "../utils/events";
 import { clearAll } from "../utils/storage";
+import { collectInstallDiagnostics } from "../utils/installDiagnostics";
 import { tokens } from "../theme";
 
 function Row({ label, value }) {
@@ -24,7 +25,14 @@ function Row({ label, value }) {
  */
 export default function DebugPanel({ onClose }) {
   const [note, setNote] = useState("");
+  const [install, setInstall] = useState(null);
   const payload = exportPayload();
+
+  useEffect(() => {
+    let live = true;
+    collectInstallDiagnostics().then((rows) => live && setInstall(rows));
+    return () => { live = false; };
+  }, []);
   const stats = summarize(payload.events);
 
   const flash = (message) => {
@@ -93,6 +101,15 @@ export default function DebugPanel({ onClose }) {
         <Row label="Humidor adds" value={stats.humidorAdds} />
         <Row label="Lounges opened" value={stats.loungesOpened} />
         <Row label="Check-ins" value={stats.checkins} />
+      </Box>
+
+      <Typography sx={{ fontSize: 10.5, fontWeight: 700, letterSpacing: 1.4, color: tokens.textFaint, mt: 3, mb: 1.2 }}>
+        INSTALL READINESS
+      </Typography>
+      <Box sx={{ p: 2, borderRadius: "16px", bgcolor: tokens.surface, border: `1px solid ${tokens.line}` }}>
+        {install
+          ? install.map(([label, value]) => <Row key={label} label={label} value={value} />)
+          : <Typography sx={{ fontSize: 12, color: tokens.textFaint }}>checking…</Typography>}
       </Box>
 
       <Stack spacing={1.2} sx={{ mt: 2.5 }}>
